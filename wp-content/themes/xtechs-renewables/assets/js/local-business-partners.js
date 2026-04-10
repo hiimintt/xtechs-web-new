@@ -117,6 +117,18 @@
         throw new Error((json && json.message) || "Submission failed. Please try again.");
       }
 
+      if (window.xtGa4 && typeof window.xtGa4.track === "function") {
+        window.xtGa4.track("generate_lead", {
+          form_id: "partner_quote",
+          form_destination: leadSource,
+          value: 1,
+        });
+        window.xtGa4.track("quote_request", {
+          type: "local_business_partner",
+          partner: partnerName,
+        });
+      }
+
       form.reset();
       updateRewardText();
       setMsg("Thank You for your details. Our Solar Expert will get in touch with you.", true);

@@ -280,6 +280,16 @@
           setMsg("Appointment confirmed. We will contact you shortly.", true);
           bookedTimes = [...bookedTimes, selectedTime];
           renderTimes();
+          if (window.xtGa4 && typeof window.xtGa4.track === "function") {
+            window.xtGa4.track("generate_lead", {
+              form_id: "contact_booking",
+              form_destination: "site_assessment",
+              value: 1,
+            });
+            window.xtGa4.track("quote_request", {
+              type: "site_assessment_booking",
+            });
+          }
           const paymentUrl = buildPaymentUrl(json.bookingId, payload.email);
           window.location.assign(paymentUrl);
         } catch (err) {
@@ -333,6 +343,16 @@
           }
 
           setMsg("Message sent successfully. We will contact you soon.", true);
+          if (window.xtGa4 && typeof window.xtGa4.track === "function") {
+            window.xtGa4.track("generate_lead", {
+              form_id: "contact_message",
+              form_destination: "contact_form",
+              value: 1,
+            });
+            window.xtGa4.track("contact_form_submit", {
+              intent: "message",
+            });
+          }
         } catch (_err) {
           setMsg("Could not send your message. Please try again.", false);
         } finally {

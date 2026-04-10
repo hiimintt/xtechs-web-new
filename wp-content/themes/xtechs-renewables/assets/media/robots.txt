@@ -1,23 +1,9 @@
+# Reference only — WordPress serves /robots.txt dynamically.
+# Submit this sitemap in Google Search Console:
+#   https://www.xtechsrenewables.com.au/wp-sitemap.xml
+
 User-agent: *
-Allow: /
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
 
-# Sitemap
-Sitemap: https://www.xtechsrenewables.com.au/sitemap.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Disallow admin and private areas
-Disallow: /admin/
-Disallow: /api/
-Disallow: /_next/
-Disallow: /private/
-
-# Allow important pages
-Allow: /solar/
-Allow: /battery/
-Allow: /ev-chargers/
-Allow: /electrical/
-Allow: /x-classes/
-Allow: /about/
-Allow: /contact/
+Sitemap: https://www.xtechsrenewables.com.au/wp-sitemap.xml

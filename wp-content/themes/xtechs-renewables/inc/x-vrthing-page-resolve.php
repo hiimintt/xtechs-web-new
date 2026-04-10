@@ -86,9 +86,3 @@ add_filter('document_title_parts', static function (array $title): array {
     return $title;
 }, 20);
 
-add_action('wp_head', static function (): void {
-    if (!xtechs_is_x_vrthing_request()) {
-        return;
-    }
-    echo '<meta name="robots" content="noindex,nofollow" />' . "\n";
-}, 1);

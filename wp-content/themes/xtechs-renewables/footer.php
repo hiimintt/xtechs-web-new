@@ -64,7 +64,7 @@ $support_url = get_post_type_archive_link('support') ?: home_url('/contact');
                         <li><a href="<?php echo esc_url($privacy_url); ?>"><?php esc_html_e('Privacy Policy', 'xtechs-renewables'); ?></a></li>
                         <li><a href="<?php echo esc_url($cookies_url); ?>"><?php esc_html_e('Cookie Policy', 'xtechs-renewables'); ?></a></li>
                         <li><a href="<?php echo esc_url($terms_url); ?>"><?php esc_html_e('Terms of Service', 'xtechs-renewables'); ?></a></li>
-                        <li><a href="<?php echo esc_url(home_url('/sitemap.xml')); ?>"><?php esc_html_e('Sitemap', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url(home_url('/wp-sitemap.xml')); ?>"><?php esc_html_e('Sitemap', 'xtechs-renewables'); ?></a></li>
                     </ul>
                 </div>
             </div>

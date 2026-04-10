@@ -32,8 +32,8 @@ $titles = [
         <div class="xt-container xt-hero-inner">
             <div class="xt-hero-copy">
                 <h1 class="xt-hero-h1">
-                    <span class="xt-hero-line xt-hero-line-deep"><?php esc_html_e('Solar Was Step One.', 'xtechs-renewables'); ?></span>
-                    <span class="xt-hero-line xt-text-gradient-logo"><?php esc_html_e('This Is the Upgrade', 'xtechs-renewables'); ?></span>
+                    <span class="xt-hero-line xt-hero-line-deep"><?php esc_html_e('Solar & battery for Victoria', 'xtechs-renewables'); ?></span>
+                    <span class="xt-hero-line xt-text-gradient-logo"><?php esc_html_e('Designed & installed by xTechs', 'xtechs-renewables'); ?></span>
                 </h1>
 
                 <div class="xt-hero-rotate-wrap">
@@ -45,7 +45,7 @@ $titles = [
                 </div>
 
                 <p class="xt-hero-lead">
-                    <?php esc_html_e('Power your home or business with clean, cheap & green solar energy. At xTechs Renewables, we design and install smart PV and Battery systems across Victoria helping families, builders, and businesses nullify energy costs, gain energy independence, and embrace a sustainable future.', 'xtechs-renewables'); ?>
+                    <?php esc_html_e('Solar panel installation Melbourne and solar battery storage across Victoria — plus EV chargers and off-grid options. xTechs Renewables designs and installs compliant PV and battery systems for homes, builders, and businesses.', 'xtechs-renewables'); ?>
                 </p>
 
                 <div class="xt-hero-cta-row">

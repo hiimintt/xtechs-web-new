@@ -127,3 +127,8 @@ $logo_url = $uri . '/assets/media/xlogo.png';
 </header>
 
 <main class="xt-site-main">
+<?php
+if (function_exists('xtechs_render_breadcrumbs')) {
+    xtechs_render_breadcrumbs();
+}
+?>

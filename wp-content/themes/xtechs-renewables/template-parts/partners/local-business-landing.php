@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
 
 $partner_name = 'Grounded Grocer';
 $partner_slug = 'grounded-grocer';
+/** CRM/email source tag; must match JS leadSource (partner_{slug_with_underscores}). */
+$partner_lead_source = 'partner_' . str_replace('-', '_', $partner_slug);
 $partner_logo = get_template_directory_uri() . '/assets/media/partners/grounded-cafe.png';
 $xlogo = get_template_directory_uri() . '/assets/media/xlogo.png';
 ?>
@@ -178,6 +180,44 @@ $xlogo = get_template_directory_uri() . '/assets/media/xlogo.png';
                 <p>Send your details and we'll confirm rebates, design the right system size, and record your Grounded Grocer gift card offer.</p>
 
                 <div class="xt-partner-grid">
+                    <aside class="xt-partner-side">
+                        <div id="rewards" class="xt-partner-rewards-shell">
+                            <article class="xt-partner-card">
+                                <h3>Gift Card Rewards</h3>
+                                <p class="xt-partner-rewards-collapsed">Click below to reveal the gift card amounts.</p>
+                                <button class="xt-btn xt-btn-outline xt-btn-block" type="button" data-xt-rewards-toggle aria-expanded="false" aria-controls="xt-partner-rewards-details">
+                                    Show Gift Card Rewards
+                                </button>
+                                <div id="xt-partner-rewards-details" class="xt-partner-rewards-expanded" data-xt-rewards-details hidden>
+                                    <p class="xt-partner-rewards-intro">When you install Solar and/or Battery with xTechs Renewables using this page, you receive a <strong>Grounded Grocer gift card</strong>.</p>
+                                    <ul>
+                                        <li><strong>Solar + Battery</strong> - <strong>$500</strong> Grounded Grocer Gift Card</li>
+                                        <li><strong>Solar Only</strong> OR <strong>Battery Only</strong> - <strong>$250</strong> Gift Card</li>
+                                        <li>Gift card valid for 24 months</li>
+                                        <li>Issued after installation completion</li>
+                                    </ul>
+                                    <div class="xt-partner-rewards-note">
+                                        <p><strong>Why this matters</strong></p>
+                                        <p>You lower your energy bills and get rewarded to spend locally.</p>
+                                    </div>
+                                </div>
+                                <p class="xt-partner-fine-print">Prefer to talk first? <a href="<?php echo esc_url(home_url('/contact')); ?>">Contact us</a> and mention "Grounded Grocer".</p>
+                            </article>
+
+                            <article class="xt-partner-card">
+                                <h3>Quick reminder</h3>
+                                <ul>
+                                    <li>Offer terms apply and will be confirmed before you proceed.</li>
+                                </ul>
+                                <div class="xt-partner-reminder-box">
+                                    <p><strong>Battery rebate</strong></p>
+                                    <p>Install earlier -> bigger discount. Install later -> smaller discount.</p>
+                                </div>
+                                <p class="xt-partner-fine-print">Offer terms: <a href="#offer-terms">view here</a>.</p>
+                            </article>
+                        </div>
+                    </aside>
+
                     <div class="xt-partner-main">
                         <article class="xt-partner-card">
                             <h3>Get Your Quote</h3>
@@ -236,52 +276,14 @@ $xlogo = get_template_directory_uri() . '/assets/media/xlogo.png';
 
                                 <input type="hidden" name="partnerSlug" value="<?php echo esc_attr($partner_slug); ?>" />
                                 <input type="hidden" name="partnerName" value="<?php echo esc_attr($partner_name); ?>" />
-                                <input type="hidden" name="leadSource" value="partner_grounded_grocer" />
+                                <input type="hidden" name="leadSource" value="<?php echo esc_attr($partner_lead_source); ?>" />
                             </form>
                         </article>
                     </div>
-
-                    <aside class="xt-partner-side">
-                        <div id="rewards" class="xt-partner-rewards-shell">
-                            <article class="xt-partner-card">
-                                <h3>Gift Card Rewards</h3>
-                                <p class="xt-partner-rewards-collapsed">Click below to reveal the gift card amounts.</p>
-                                <button class="xt-btn xt-btn-outline xt-btn-block" type="button" data-xt-rewards-toggle aria-expanded="false" aria-controls="xt-partner-rewards-details">
-                                    Show Gift Card Rewards
-                                </button>
-                                <div id="xt-partner-rewards-details" class="xt-partner-rewards-expanded" data-xt-rewards-details hidden>
-                                    <p class="xt-partner-rewards-intro">When you install Solar and/or Battery with xTechs Renewables using this page, you receive a <strong>Grounded Grocer gift card</strong>.</p>
-                                    <ul>
-                                        <li><strong>Solar + Battery</strong> - <strong>$500</strong> Grounded Grocer Gift Card</li>
-                                        <li><strong>Solar Only</strong> OR <strong>Battery Only</strong> - <strong>$250</strong> Gift Card</li>
-                                        <li>Gift card valid for 24 months</li>
-                                        <li>Issued after installation completion</li>
-                                    </ul>
-                                    <div class="xt-partner-rewards-note">
-                                        <p><strong>Why this matters</strong></p>
-                                        <p>You lower your energy bills and get rewarded to spend locally.</p>
-                                    </div>
-                                </div>
-                                <p class="xt-partner-fine-print">Prefer to talk first? <a href="<?php echo esc_url(home_url('/contact')); ?>">Contact us</a> and mention "Grounded Grocer".</p>
-                            </article>
-
-                            <article class="xt-partner-card">
-                                <h3>Quick reminder</h3>
-                                <ul>
-                                    <li>Offer terms apply and will be confirmed before you proceed.</li>
-                                </ul>
-                                <div class="xt-partner-reminder-box">
-                                    <p><strong>Battery rebate</strong></p>
-                                    <p>Install earlier -> bigger discount. Install later -> smaller discount.</p>
-                                </div>
-                                <p class="xt-partner-fine-print">Offer terms: <a href="#offer-terms">view here</a>.</p>
-                            </article>
-                        </div>
-                    </aside>
                 </div>
             </section>
 
-            <article class="xt-partner-card xt-partner-faq-card">
+            <article class="xt-partner-card">
                 <h3>FAQ</h3>
                 <details class="xt-partner-details">
                     <summary>Do I have to be a Grounded Grocer customer to qualify?</summary>

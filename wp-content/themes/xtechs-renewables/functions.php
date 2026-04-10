@@ -5,6 +5,9 @@ if (!defined('ABSPATH')) {
 
 define('XTECHS_THEME_VERSION', '1.4.3');
 
+require_once get_template_directory() . '/inc/ga4.php';
+require_once get_template_directory() . '/inc/resend-notify.php';
+
 /**
  * Disable page caching aggressively on local Docker hosts so CSS/JS changes are visible immediately.
  */
@@ -81,6 +84,7 @@ function xtechs_enqueue_assets() {
     $local_partner_js_path = get_template_directory() . '/assets/js/local-business-partners.js';
     $chatbot_js_path = get_template_directory() . '/assets/js/chatbot.js';
     $cookie_js_path = get_template_directory() . '/assets/js/cookie-consent.js';
+    $ga4_js_path = get_template_directory() . '/assets/js/ga4.js';
     $is_local_host = xtechs_is_local_runtime_host();
     $disable_asset_cache = (is_user_logged_in() && current_user_can('manage_options')) || $is_local_host;
     $runtime_ver = (string) time();
@@ -106,6 +110,9 @@ function xtechs_enqueue_assets() {
     $cookie_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($cookie_js_path) ? (string) filemtime($cookie_js_path) : XTECHS_THEME_VERSION);
+    $ga4_js_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($ga4_js_path) ? (string) filemtime($ga4_js_path) : XTECHS_THEME_VERSION);
 
     wp_enqueue_style('xtechs-theme-style', get_stylesheet_uri(), [], XTECHS_THEME_VERSION);
     wp_enqueue_style(
@@ -122,6 +129,33 @@ function xtechs_enqueue_assets() {
         $theme_js_ver,
         true
     );
+
+    wp_enqueue_script(
+        'xtechs-cookie-consent',
+        get_template_directory_uri() . '/assets/js/cookie-consent.js',
+        [],
+        $cookie_js_ver,
+        true
+    );
+    wp_localize_script('xtechs-cookie-consent', 'xtCookieConsent', [
+        'privacyUrl' => home_url('/privacy'),
+        'cookiesUrl' => home_url('/cookies'),
+    ]);
+
+    if (xtechs_ga4_is_configured()) {
+        wp_enqueue_script(
+            'xtechs-ga4',
+            get_template_directory_uri() . '/assets/js/ga4.js',
+            ['xtechs-cookie-consent'],
+            $ga4_js_ver,
+            true
+        );
+        wp_localize_script('xtechs-ga4', 'xtGa4Config', [
+            'measurementId' => (string) GA4_MEASUREMENT_ID,
+        ]);
+    }
+
+    $ga4_dep = xtechs_ga4_is_configured() ? ['xtechs-ga4'] : [];
 
     if (is_page('about')) {
         wp_enqueue_script(
@@ -148,7 +182,7 @@ function xtechs_enqueue_assets() {
         wp_enqueue_script(
             'xtechs-contact',
             get_template_directory_uri() . '/assets/js/contact.js',
-            [],
+            $ga4_dep,
             $contact_js_ver,
             true
         );
@@ -165,7 +199,7 @@ function xtechs_enqueue_assets() {
         wp_enqueue_script(
             'xtechs-local-business-partners',
             get_template_directory_uri() . '/assets/js/local-business-partners.js',
-            [],
+            $ga4_dep,
             $local_partner_js_ver,
             true
         );
@@ -188,17 +222,6 @@ function xtechs_enqueue_assets() {
         'contactUrl' => home_url('/contact'),
     ]);
 
-    wp_enqueue_script(
-        'xtechs-cookie-consent',
-        get_template_directory_uri() . '/assets/js/cookie-consent.js',
-        [],
-        $cookie_js_ver,
-        true
-    );
-    wp_localize_script('xtechs-cookie-consent', 'xtCookieConsent', [
-        'privacyUrl' => home_url('/privacy'),
-        'cookiesUrl' => home_url('/cookies'),
-    ]);
 }
 
 add_action('widgets_init', 'xtechs_widgets_init');
@@ -222,6 +245,9 @@ require_once get_template_directory() . '/inc/theme-pages-seed.php';
 require_once get_template_directory() . '/inc/xclasses-page-resolve.php';
 require_once get_template_directory() . '/inc/amber-electric-page-resolve.php';
 require_once get_template_directory() . '/inc/x-vrthing-page-resolve.php';
+require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/seo-keyword-targets.php';
+require_once get_template_directory() . '/inc/onpage-seo.php';
 
 /**
  * URL for a Page: uses real permalink when a published page exists at $path (e.g. pv-battery/residential).
@@ -385,7 +411,12 @@ function xtechs_time_to_minutes(string $time): int {
 }
 
 function xtechs_open_leads_db(): ?wpdb {
-    $leads_db = new wpdb('wordpress', 'wordpress', 'wordpress', 'localhost');
+    $db_user = defined('DB_USER') ? (string) DB_USER : 'root';
+    $db_pass = defined('DB_PASSWORD') ? (string) DB_PASSWORD : '';
+    $db_name = defined('DB_NAME') ? (string) DB_NAME : 'wordpress';
+    $db_host = defined('DB_HOST') ? (string) DB_HOST : '127.0.0.1';
+
+    $leads_db = new wpdb($db_user, $db_pass, $db_name, $db_host);
     if (!empty($leads_db->error)) {
         return null;
     }
@@ -956,6 +987,23 @@ add_action('template_redirect', function (): void {
             wp_send_json(['error' => 'Failed to create booking'], 500);
         }
 
+        $booking_email = strtolower($email);
+        $payment_url = xtechs_booking_stripe_payment_url($booking_id, $booking_email);
+        xtechs_resend_send_booking_notification([
+            'bookingId' => $booking_id,
+            'firstName' => $first_name,
+            'lastName' => $last_name,
+            'email' => $booking_email,
+            'phone' => $phone,
+            'address' => $address,
+            'serviceType' => $service_type,
+            'selectedDate' => $selected_date,
+            'selectedTime' => $selected_time,
+            'notes' => $notes,
+            'paymentUrl' => $payment_url,
+            'paymentStatus' => 'pending',
+        ]);
+
         wp_send_json(['success' => true, 'message' => 'Booking created successfully', 'bookingId' => $booking_id], 201);
     }
 
@@ -1132,6 +1180,20 @@ add_action('template_redirect', function (): void {
         }
         wp_send_json(['success' => false, 'message' => $msg], 502);
     }
+
+    xtechs_resend_notify_contact_lead_success(
+        $source,
+        $first_name,
+        $last_name,
+        $name,
+        $email,
+        $phone,
+        $subject,
+        $message,
+        $lead_id,
+        $lead_type,
+        $tenant_id
+    );
 
     wp_send_json(['success' => true], 200);
 });
