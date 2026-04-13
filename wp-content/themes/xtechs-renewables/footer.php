@@ -9,6 +9,12 @@ $careers_url = get_page_by_path('careers') ? home_url('/careers') : home_url('/c
 $privacy_url = get_page_by_path('privacy') ? home_url('/privacy') : home_url('/contact');
 $cookies_url = get_page_by_path('cookies') ? home_url('/cookies') : home_url('/contact');
 $terms_url = get_page_by_path('terms') ? home_url('/terms') : home_url('/contact');
+$locations_url = get_page_by_path('locations') ? home_url('/locations') : home_url('/contact');
+$melbourne_url = get_page_by_path('melbourne-cbd') ? home_url('/melbourne-cbd') : home_url('/contact');
+$south_east_melbourne_url = get_page_by_path('south-east-melbourne') ? home_url('/south-east-melbourne') : home_url('/contact');
+$geelong_url = get_page_by_path('geelong') ? home_url('/geelong') : home_url('/contact');
+$bendigo_url = get_page_by_path('bendigo') ? home_url('/bendigo') : home_url('/contact');
+$mornington_url = get_page_by_path('mornington-peninsula') ? home_url('/mornington-peninsula') : home_url('/contact');
 $support_url = get_post_type_archive_link('support') ?: home_url('/contact');
 ?>
 </main>
@@ -56,6 +62,17 @@ $support_url = get_post_type_archive_link('support') ?: home_url('/contact');
                         <li><a href="<?php echo esc_url(function_exists('xtechs_page_link') ? xtechs_page_link('x-classes') : home_url('/x-classes/')); ?>"><?php esc_html_e('X-Classes', 'xtechs-renewables'); ?></a></li>
                         <li><a href="<?php echo esc_url($support_url); ?>"><?php esc_html_e('Help / Support', 'xtechs-renewables'); ?></a></li>
                         <li><a href="<?php echo esc_url(function_exists('xtechs_page_link') ? xtechs_page_link('x-vrthing') : home_url('/x-vrthing/')); ?>"><?php esc_html_e('X-vrthing Platform', 'xtechs-renewables'); ?></a></li>
+                    </ul>
+                </div>
+                <div class="xt-footer-col">
+                    <h3 class="xt-footer-col-title"><?php esc_html_e('Locations', 'xtechs-renewables'); ?></h3>
+                    <ul class="xt-footer-links">
+                        <li><a href="<?php echo esc_url($locations_url); ?>"><?php esc_html_e('All Locations', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url($melbourne_url); ?>"><?php esc_html_e('Melbourne CBD', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url($south_east_melbourne_url); ?>"><?php esc_html_e('South-East Melbourne', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url($geelong_url); ?>"><?php esc_html_e('Geelong', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url($bendigo_url); ?>"><?php esc_html_e('Bendigo', 'xtechs-renewables'); ?></a></li>
+                        <li><a href="<?php echo esc_url($mornington_url); ?>"><?php esc_html_e('Mornington Peninsula', 'xtechs-renewables'); ?></a></li>
                     </ul>
                 </div>
                 <div class="xt-footer-col">

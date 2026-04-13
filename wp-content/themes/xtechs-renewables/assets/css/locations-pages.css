@@ -1,0 +1,131 @@
+.xt-locations-page {
+    padding: 56px 0 72px;
+}
+
+.xt-locations-inner {
+    max-width: 980px;
+}
+
+.xt-locations-head {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.xt-locations-head h1 {
+    margin: 0;
+    font-size: clamp(2rem, 3.8vw, 2.8rem);
+    line-height: 1.12;
+}
+
+.xt-locations-head p {
+    margin: 14px auto 0;
+    max-width: 760px;
+    color: #4d5b6d;
+}
+
+.xt-locations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.xt-location-card {
+    border: 1px solid #e5e8ef;
+    border-radius: 16px;
+    padding: 22px;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(11, 18, 32, 0.05);
+}
+
+.xt-location-card h2 {
+    margin: 0 0 8px;
+}
+
+.xt-location-card p {
+    margin: 0;
+    color: #233044;
+}
+
+.xt-location-card ul {
+    margin: 12px 0 0 1.1rem;
+    color: #233044;
+}
+
+.xt-location-card a,
+.xt-location-detail a {
+    color: var(--brand-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+}
+
+.xt-location-card a:hover,
+.xt-location-detail a:hover {
+    color: var(--brand-secondary);
+}
+
+.xt-locations-cta {
+    margin-top: 24px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--brand-primary) 12%, #fff);
+    border: 1px solid color-mix(in srgb, var(--brand-primary) 24%, #fff);
+    padding: 22px;
+    text-align: center;
+}
+
+.xt-locations-cta h2 {
+    margin: 0 0 8px;
+}
+
+.xt-locations-cta p {
+    margin: 0 0 16px;
+}
+
+.xt-location-detail {
+    border: 1px solid #e5e8ef;
+    border-radius: 18px;
+    padding: 28px;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(11, 18, 32, 0.05);
+}
+
+.xt-location-detail h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.22rem;
+}
+
+.xt-location-detail h2:not(:first-child) {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #edf0f5;
+}
+
+.xt-location-detail p,
+.xt-location-detail ul {
+    margin: 0;
+    line-height: 1.7;
+    color: #1f2633;
+}
+
+.xt-location-detail ul {
+    margin-left: 1.2rem;
+}
+
+@media (max-width: 900px) {
+    .xt-locations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .xt-locations-page {
+        padding: 36px 0 56px;
+    }
+
+    .xt-location-card,
+    .xt-location-detail,
+    .xt-locations-cta {
+        padding: 18px;
+    }
+}

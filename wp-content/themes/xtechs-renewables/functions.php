@@ -78,6 +78,8 @@ function xtechs_theme_setup() {
 add_action('wp_enqueue_scripts', 'xtechs_enqueue_assets');
 function xtechs_enqueue_assets() {
     $global_css_path = get_template_directory() . '/assets/css/global.css';
+    $legal_css_path = get_template_directory() . '/assets/css/legal-pages.css';
+    $locations_css_path = get_template_directory() . '/assets/css/locations-pages.css';
     $theme_js_path = get_template_directory() . '/assets/js/theme.js';
     $about_js_path = get_template_directory() . '/assets/js/about.js';
     $contact_js_path = get_template_directory() . '/assets/js/contact.js';
@@ -92,6 +94,12 @@ function xtechs_enqueue_assets() {
     $global_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($global_css_path) ? (string) filemtime($global_css_path) : XTECHS_THEME_VERSION);
+    $legal_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($legal_css_path) ? (string) filemtime($legal_css_path) : XTECHS_THEME_VERSION);
+    $locations_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($locations_css_path) ? (string) filemtime($locations_css_path) : XTECHS_THEME_VERSION);
     $theme_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($theme_js_path) ? (string) filemtime($theme_js_path) : XTECHS_THEME_VERSION);
@@ -121,6 +129,22 @@ function xtechs_enqueue_assets() {
         ['xtechs-theme-style'],
         $global_css_ver
     );
+    if (is_page(['privacy', 'cookies', 'terms'])) {
+        wp_enqueue_style(
+            'xtechs-legal-pages',
+            get_template_directory_uri() . '/assets/css/legal-pages.css',
+            ['xtechs-theme-main'],
+            $legal_css_ver
+        );
+    }
+    if (is_page(['locations', 'melbourne', 'melbourne-cbd', 'south-east-melbourne', 'geelong', 'bendigo', 'mornington-peninsula'])) {
+        wp_enqueue_style(
+            'xtechs-locations-pages',
+            get_template_directory_uri() . '/assets/css/locations-pages.css',
+            ['xtechs-theme-main'],
+            $locations_css_ver
+        );
+    }
 
     wp_enqueue_script(
         'xtechs-theme-main',
