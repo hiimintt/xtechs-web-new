@@ -668,6 +668,20 @@ add_action('wp_head', static function (): void {
     echo '<meta name="twitter:image" content="' . esc_url($og_image) . '" />' . "\n";
 }, 6);
 
+/**
+ * x-vrthing keeps noindex, but still needs a meta description for audits.
+ */
+add_action('wp_head', static function (): void {
+    if (!function_exists('xtechs_is_x_vrthing_request') || !xtechs_is_x_vrthing_request()) {
+        return;
+    }
+    $desc = __(
+        'X-vrthing by xTechs Renewables: a smart energy platform concept connecting solar, battery, EV charging, and home energy automation for Victoria.',
+        'xtechs-renewables'
+    );
+    echo '<meta name="description" content="' . esc_attr($desc) . '" />' . "\n";
+}, 5);
+
 add_action('wp_head', static function (): void {
     if (is_feed() || is_embed() || is_customize_preview()) {
         return;

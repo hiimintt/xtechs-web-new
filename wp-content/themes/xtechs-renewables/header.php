@@ -29,7 +29,7 @@ $logo_url = $uri . '/assets/media/xlogo.png';
                         <?php esc_html_e('PV & Battery', 'xtechs-renewables'); ?>
                         <?php echo xtechs_icon_chevron_down(); ?>
                     </a>
-                    <div class="xt-dropdown" role="menu">
+                    <div class="xt-dropdown">
                         <a href="<?php echo esc_url(xtechs_page_link('pv-battery/residential')); ?>"><?php esc_html_e('Residential', 'xtechs-renewables'); ?></a>
                         <a href="<?php echo esc_url(xtechs_page_link('pv-battery/business')); ?>"><?php esc_html_e('Commercial (For Business)', 'xtechs-renewables'); ?></a>
                         <a href="<?php echo esc_url(xtechs_page_link('pv-battery/off-grid')); ?>"><?php esc_html_e('Off-Grid', 'xtechs-renewables'); ?></a>
@@ -43,7 +43,7 @@ $logo_url = $uri . '/assets/media/xlogo.png';
                         <?php esc_html_e('SolarFold', 'xtechs-renewables'); ?>
                         <?php echo xtechs_icon_chevron_down(); ?>
                     </a>
-                    <div class="xt-dropdown" role="menu">
+                    <div class="xt-dropdown">
                         <a href="<?php echo esc_url(home_url('/solarfold/military')); ?>"><?php esc_html_e('For Military', 'xtechs-renewables'); ?></a>
                         <a href="<?php echo esc_url(home_url('/solarfold/mining')); ?>"><?php esc_html_e('For Mining', 'xtechs-renewables'); ?></a>
                         <a href="<?php echo esc_url(home_url('/solarfold/communities')); ?>"><?php esc_html_e('For Communities', 'xtechs-renewables'); ?></a>

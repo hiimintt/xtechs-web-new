@@ -77,6 +77,7 @@ function xtechs_theme_setup() {
 
 add_action('wp_enqueue_scripts', 'xtechs_enqueue_assets');
 function xtechs_enqueue_assets() {
+    $critical_css_path = get_template_directory() . '/assets/css/critical.css';
     $global_css_path = get_template_directory() . '/assets/css/global.css';
     $legal_css_path = get_template_directory() . '/assets/css/legal-pages.css';
     $locations_css_path = get_template_directory() . '/assets/css/locations-pages.css';
@@ -93,6 +94,9 @@ function xtechs_enqueue_assets() {
     $disable_asset_cache = (is_user_logged_in() && current_user_can('manage_options')) || $is_local_host;
     $runtime_ver = (string) time();
 
+    $critical_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($critical_css_path) ? (string) filemtime($critical_css_path) : XTECHS_THEME_VERSION);
     $global_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($global_css_path) ? (string) filemtime($global_css_path) : XTECHS_THEME_VERSION);
@@ -132,9 +136,15 @@ function xtechs_enqueue_assets() {
 
     wp_enqueue_style('xtechs-theme-style', get_stylesheet_uri(), [], XTECHS_THEME_VERSION);
     wp_enqueue_style(
+        'xtechs-theme-critical',
+        get_template_directory_uri() . '/assets/css/critical.css',
+        ['xtechs-theme-style'],
+        $critical_css_ver
+    );
+    wp_enqueue_style(
         'xtechs-theme-main',
         get_template_directory_uri() . '/assets/css/global.css',
-        ['xtechs-theme-style'],
+        ['xtechs-theme-critical'],
         $global_css_ver
     );
     if (is_page(['privacy', 'cookies', 'terms'])) {
@@ -270,7 +280,131 @@ function xtechs_enqueue_assets() {
         'contactUrl' => home_url('/contact'),
     ]);
 
+    xtechs_mark_script_defer('xtechs-theme-main');
+    xtechs_mark_script_defer('xtechs-cookie-consent');
+    xtechs_mark_script_defer('xtechs-contact');
+    xtechs_mark_script_defer('xtechs-about');
+    xtechs_mark_script_defer('xtechs-local-business-partners');
+    xtechs_mark_script_defer('xtechs-loc-process');
+    xtechs_mark_script_defer('xtechs-ga4');
+
 }
+
+/**
+ * Mark a script as defer when the current WP version supports it.
+ */
+function xtechs_mark_script_defer(string $handle): void {
+    if (!wp_script_is($handle, 'enqueued')) {
+        return;
+    }
+    wp_script_add_data($handle, 'strategy', 'defer');
+}
+
+/**
+ * Load heavy theme CSS asynchronously after critical CSS is applied.
+ */
+add_filter('style_loader_tag', function (string $html, string $handle, string $href, string $media): string {
+    if ($handle !== 'xtechs-theme-main') {
+        return $html;
+    }
+    $href_attr = esc_url($href);
+    return "<link rel='preload' href='{$href_attr}' as='style' onload=\"this.onload=null;this.rel='stylesheet'\">"
+        . "<noscript><link rel='stylesheet' href='{$href_attr}'></noscript>";
+}, 10, 4);
+
+/**
+ * Optimize attachment image attributes by default.
+ */
+add_filter('wp_get_attachment_image_attributes', function (array $attr): array {
+    if (empty($attr['decoding'])) {
+        $attr['decoding'] = 'async';
+    }
+
+    $class_name = isset($attr['class']) ? (string) $attr['class'] : '';
+    $is_hero = strpos($class_name, 'hero') !== false || strpos($class_name, 'brand') !== false;
+
+    if (!isset($attr['fetchpriority'])) {
+        $attr['fetchpriority'] = $is_hero ? 'high' : 'low';
+    }
+    if (!isset($attr['loading'])) {
+        $attr['loading'] = $is_hero ? 'eager' : 'lazy';
+    }
+
+    return $attr;
+}, 10, 1);
+
+/**
+ * Add fast-loading defaults for hardcoded <img> tags in theme templates.
+ */
+function xtechs_optimize_html_img_tags(string $html): string {
+    if (stripos($html, '<img') === false) {
+        return $html;
+    }
+
+    return (string) preg_replace_callback('/<img\b[^>]*>/i', static function (array $matches): string {
+        $tag = $matches[0];
+        $class_name = '';
+        if (preg_match('/\bclass=(["\'])(.*?)\1/i', $tag, $m)) {
+            $class_name = strtolower((string) $m[2]);
+        }
+
+        $is_lcp_candidate = strpos($class_name, 'hero') !== false
+            || strpos($class_name, 'brand') !== false
+            || stripos($tag, 'fetchpriority=') !== false;
+
+        $append_attr = static function (string $current_tag, string $attr): string {
+            return (string) preg_replace('/\s*\/?>$/', ' ' . $attr . '$0', $current_tag, 1);
+        };
+
+        if (stripos($tag, 'decoding=') === false) {
+            $tag = $append_attr($tag, 'decoding="async"');
+        }
+        if (stripos($tag, 'loading=') === false) {
+            $tag = $append_attr($tag, $is_lcp_candidate ? 'loading="eager"' : 'loading="lazy"');
+        }
+        if (stripos($tag, 'fetchpriority=') === false) {
+            $tag = $append_attr($tag, $is_lcp_candidate ? 'fetchpriority="high"' : 'fetchpriority="low"');
+        }
+
+        return $tag;
+    }, $html) ?: $html;
+}
+
+add_action('template_redirect', function (): void {
+    if (is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    ob_start('xtechs_optimize_html_img_tags');
+}, 0);
+
+/**
+ * Force-load chatbot script if optimization/cache plugins skip enqueued script.
+ */
+add_action('wp_footer', function (): void {
+    if (is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    $chatbot_path = get_template_directory() . '/assets/js/chatbot.js';
+    $chatbot_src = get_template_directory_uri() . '/assets/js/chatbot.js';
+    $chatbot_ver = file_exists($chatbot_path) ? (string) filemtime($chatbot_path) : XTECHS_THEME_VERSION;
+    ?>
+    <script>
+    (function () {
+      if (document.querySelector('.xt-chatbot-shell')) return;
+      var existing = document.querySelector('script[src*="assets/js/chatbot.js"]');
+      if (existing) return;
+      var s = document.createElement('script');
+      s.src = "<?php echo esc_url($chatbot_src); ?>?v=<?php echo esc_attr($chatbot_ver); ?>";
+      s.defer = true;
+      document.body.appendChild(s);
+    })();
+    </script>
+    <?php
+}, 100);
+
+/**
+ * Fail-safe loader: re-inject chatbot script if it did not initialize.
+ */
 
 add_action('widgets_init', 'xtechs_widgets_init');
 function xtechs_widgets_init() {

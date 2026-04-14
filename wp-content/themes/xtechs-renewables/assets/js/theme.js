@@ -10,6 +10,54 @@
   }
 
   onReady(function () {
+    var chatbotFallbackFab = document.getElementById('xt-chatbot-fallback-fab');
+    if (chatbotFallbackFab) {
+      var chatbotScriptSrc = chatbotFallbackFab.getAttribute('data-chatbot-src') || '';
+      var openChatbotShell = function () {
+        var realFab = document.querySelector('.xt-chatbot-fab');
+        if (realFab && !realFab.hidden) {
+          realFab.click();
+          return true;
+        }
+        return false;
+      };
+
+      chatbotFallbackFab.addEventListener('click', function () {
+        if (openChatbotShell()) return;
+
+        if (chatbotScriptSrc && !document.querySelector('script[src*="assets/js/chatbot.js"]')) {
+          var script = document.createElement('script');
+          script.src = chatbotScriptSrc;
+          script.defer = true;
+          document.body.appendChild(script);
+        }
+
+        var attempts = 0;
+        var timer = window.setInterval(function () {
+          attempts += 1;
+          if (openChatbotShell() || attempts > 20) {
+            window.clearInterval(timer);
+          }
+        }, 150);
+      });
+
+      window.setInterval(function () {
+        var realFab = document.querySelector('.xt-chatbot-fab');
+        var chatWindow = document.querySelector('.xt-chatbot-window');
+        var isWindowOpen = !!(chatWindow && !chatWindow.hidden && chatWindow.offsetWidth > 0 && chatWindow.offsetHeight > 0);
+        if (isWindowOpen) {
+          chatbotFallbackFab.hidden = true;
+          return;
+        }
+        if (!realFab) {
+          chatbotFallbackFab.hidden = false;
+          return;
+        }
+        var isVisible = !realFab.hidden && realFab.offsetWidth > 0 && realFab.offsetHeight > 0;
+        chatbotFallbackFab.hidden = isVisible;
+      }, 400);
+    }
+
     var menuBtn = document.querySelector('.xt-menu-toggle');
     var mobileNav = document.getElementById('xt-mobile-nav');
     if (menuBtn && mobileNav) {

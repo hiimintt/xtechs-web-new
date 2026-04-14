@@ -75,6 +75,9 @@
       notes ? `Notes:\n${notes}` : "",
       document.referrer ? `Referrer: ${document.referrer}` : "",
     ].filter(Boolean);
+    const firstName = name.split(/\s+/)[0] || "";
+    const lastName = name.replace(firstName, "").trim();
+    const subject = `Local Business Partner Quote - ${partnerName}`;
 
     submitBtn.disabled = true;
     const oldText = submitBtn.textContent;
@@ -85,9 +88,12 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          firstName,
+          lastName,
           name,
           email,
           phone,
+          subject,
           message: messageLines.join("\n"),
           source: leadSource,
           leadType: "get_your_quote_submit",
@@ -101,9 +107,12 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            firstName,
+            lastName,
             name,
             email,
             phone,
+            subject,
             message: messageLines.join("\n"),
             source: leadSource,
             leadType: "get_your_quote_submit",

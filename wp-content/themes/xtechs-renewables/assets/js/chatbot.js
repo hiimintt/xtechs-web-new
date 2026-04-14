@@ -21,7 +21,9 @@
   const shell = document.createElement("div");
   shell.className = "xt-chatbot-shell";
   shell.innerHTML = `
-    <button class="xt-chatbot-fab" type="button" aria-label="Open chat" aria-expanded="false" aria-controls="xt-chatbot-panel">💬</button>
+    <button class="xt-chatbot-fab" type="button" aria-label="Open chat" aria-expanded="false" aria-controls="xt-chatbot-panel">
+      <span class="xt-chatbot-fab-glyph" aria-hidden="true">💬</span>
+    </button>
     <section id="xt-chatbot-panel" class="xt-chatbot-window" aria-label="xTechs chat support" hidden>
       <header class="xt-chatbot-header">
         <strong>xTechs Chat Support</strong>
@@ -29,22 +31,6 @@
           <button type="button" data-chatbot-close aria-label="Close chat">×</button>
         </div>
       </header>
-
-      <section class="xt-chatbot-customer" data-chatbot-customer>
-        <h4>Before we start</h4>
-        <p>Share your details so we can provide personalized support.</p>
-        <div class="xt-chatbot-customer-grid">
-          <input type="text" data-customer-name placeholder="Full name *" />
-          <input type="email" data-customer-email placeholder="Email *" />
-          <input type="text" data-customer-address placeholder="Address (Suburb, VIC) *" />
-          <input type="text" data-customer-phone placeholder="Phone (optional)" />
-        </div>
-        <p class="xt-chatbot-customer-error" data-chatbot-customer-error hidden></p>
-        <div class="xt-chatbot-customer-actions">
-          <button type="button" data-chatbot-customer-submit>Continue to Chat</button>
-          <button type="button" data-chatbot-customer-skip>Skip</button>
-        </div>
-      </section>
 
       <div class="xt-chatbot-body" data-chatbot-body hidden></div>
       <div class="xt-chatbot-suggestions" data-chatbot-suggestions hidden></div>
@@ -64,14 +50,6 @@
   const input = shell.querySelector("[data-chatbot-input]");
   const sendBtn = shell.querySelector("[data-chatbot-send]");
   const suggestionsWrap = shell.querySelector("[data-chatbot-suggestions]");
-  const customerSection = shell.querySelector("[data-chatbot-customer]");
-  const customerName = shell.querySelector("[data-customer-name]");
-  const customerEmail = shell.querySelector("[data-customer-email]");
-  const customerAddress = shell.querySelector("[data-customer-address]");
-  const customerPhone = shell.querySelector("[data-customer-phone]");
-  const customerSubmitBtn = shell.querySelector("[data-chatbot-customer-submit]");
-  const customerSkipBtn = shell.querySelector("[data-chatbot-customer-skip]");
-  const customerError = shell.querySelector("[data-chatbot-customer-error]");
   const footer = shell.querySelector("[data-chatbot-footer]");
   const contactLink = shell.querySelector(".xt-chatbot-contact-link");
   let loading = false;
@@ -123,19 +101,10 @@
   };
 
   const showChatUI = () => {
-    customerSection.hidden = true;
     body.hidden = false;
     suggestionsWrap.hidden = false;
     footer.hidden = false;
     contactLink.hidden = false;
-  };
-
-  const showCustomerUI = () => {
-    customerSection.hidden = false;
-    body.hidden = true;
-    suggestionsWrap.hidden = true;
-    footer.hidden = true;
-    contactLink.hidden = true;
   };
 
   const setPanelOpen = (open) => {
@@ -144,16 +113,13 @@
     fab.setAttribute("aria-expanded", open ? "true" : "false");
     if (open && !panelInitialized) {
       panelInitialized = true;
-      if (customerInfo) {
-        showChatUI();
-        if (body.children.length === 0) {
-          addMessage("assistant", `${nowGreeting()}! Welcome to xTechs Renewables. How can I help you today?`);
-          renderSuggestions("solar");
-        }
-        setTimeout(() => input.focus(), 120);
-      } else {
-        showCustomerUI();
+      showChatUI();
+      if (body.children.length === 0) {
+        const name = customerInfo && customerInfo.fullName ? ` ${String(customerInfo.fullName).split(" ")[0]}` : "";
+        addMessage("assistant", `${nowGreeting()}${name}! Welcome to xTechs Renewables. How can I help you today?`);
+        renderSuggestions("solar");
       }
+      setTimeout(() => input.focus(), 120);
     }
     if (open && panelInitialized) {
       setTimeout(() => {
@@ -212,41 +178,6 @@
 
   fab.addEventListener("click", () => setPanelOpen(true));
   closeBtn.addEventListener("click", () => setPanelOpen(false));
-
-  customerSubmitBtn.addEventListener("click", () => {
-    const fullName = customerName.value.trim();
-    const email = customerEmail.value.trim();
-    const address = customerAddress.value.trim();
-    const phone = customerPhone.value.trim();
-    const errors = [];
-    if (fullName.length < 2) errors.push("Full name is required.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push("Valid email is required.");
-    if (address.length < 5) errors.push("Address is required.");
-    if (errors.length > 0) {
-      customerError.hidden = false;
-      customerError.textContent = errors.join(" ");
-      return;
-    }
-    customerError.hidden = true;
-    customerInfo = { fullName, email, address, phone, collectedAt: new Date().toISOString() };
-    sessionStorage.setItem("xt-chatbot-customer-info", JSON.stringify(customerInfo));
-    showChatUI();
-    if (body.children.length === 0) {
-      addMessage("assistant", `${nowGreeting()} ${fullName.split(" ")[0]}! How can I help you today?`);
-      renderSuggestions("welcome");
-    }
-    input.focus();
-  });
-  customerSkipBtn.addEventListener("click", () => {
-    customerInfo = null;
-    customerError.hidden = true;
-    showChatUI();
-    if (body.children.length === 0) {
-      addMessage("assistant", `${nowGreeting()}! Welcome to xTechs Renewables. How can I help you today?`);
-      renderSuggestions("welcome");
-    }
-    input.focus();
-  });
   sendBtn.addEventListener("click", sendMessage);
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {

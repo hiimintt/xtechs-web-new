@@ -16,6 +16,9 @@ $geelong_url = get_page_by_path('geelong') ? home_url('/geelong') : home_url('/c
 $bendigo_url = get_page_by_path('bendigo') ? home_url('/bendigo') : home_url('/contact');
 $mornington_url = get_page_by_path('mornington-peninsula') ? home_url('/mornington-peninsula') : home_url('/contact');
 $support_url = get_post_type_archive_link('support') ?: home_url('/contact');
+$chatbot_script_path = get_template_directory() . '/assets/js/chatbot.js';
+$chatbot_script_ver = file_exists($chatbot_script_path) ? (string) filemtime($chatbot_script_path) : '1';
+$chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_directory_uri() . '/assets/js/chatbot.js');
 ?>
 </main>
 
@@ -162,6 +165,15 @@ $support_url = get_post_type_archive_link('support') ?: home_url('/contact');
         </div>
     </div>
 </div>
+<button
+    type="button"
+    id="xt-chatbot-fallback-fab"
+    class="xt-chatbot-fallback-fab"
+    aria-label="<?php esc_attr_e('Open chat', 'xtechs-renewables'); ?>"
+    data-chatbot-src="<?php echo esc_url($chatbot_script_url); ?>"
+>
+    <span aria-hidden="true">💬</span>
+</button>
 <?php wp_footer(); ?>
 </body>
 </html>
