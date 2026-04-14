@@ -80,6 +80,8 @@ function xtechs_enqueue_assets() {
     $global_css_path = get_template_directory() . '/assets/css/global.css';
     $legal_css_path = get_template_directory() . '/assets/css/legal-pages.css';
     $locations_css_path = get_template_directory() . '/assets/css/locations-pages.css';
+    $loc_landing_css_path = get_template_directory() . '/assets/css/location-landing.css';
+    $loc_process_js_path = get_template_directory() . '/assets/js/location-process.js';
     $theme_js_path = get_template_directory() . '/assets/js/theme.js';
     $about_js_path = get_template_directory() . '/assets/js/about.js';
     $contact_js_path = get_template_directory() . '/assets/js/contact.js';
@@ -100,6 +102,12 @@ function xtechs_enqueue_assets() {
     $locations_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($locations_css_path) ? (string) filemtime($locations_css_path) : XTECHS_THEME_VERSION);
+    $loc_landing_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($loc_landing_css_path) ? (string) filemtime($loc_landing_css_path) : XTECHS_THEME_VERSION);
+    $loc_process_js_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($loc_process_js_path) ? (string) filemtime($loc_process_js_path) : XTECHS_THEME_VERSION);
     $theme_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($theme_js_path) ? (string) filemtime($theme_js_path) : XTECHS_THEME_VERSION);
@@ -137,12 +145,28 @@ function xtechs_enqueue_assets() {
             $legal_css_ver
         );
     }
-    if (is_page(['locations', 'melbourne', 'melbourne-cbd', 'south-east-melbourne', 'geelong', 'bendigo', 'mornington-peninsula'])) {
+    if (is_page(['locations', 'melbourne'])) {
         wp_enqueue_style(
             'xtechs-locations-pages',
             get_template_directory_uri() . '/assets/css/locations-pages.css',
             ['xtechs-theme-main'],
             $locations_css_ver
+        );
+    }
+    $loc_landing_slugs = ['melbourne-cbd', 'bendigo', 'geelong', 'mornington-peninsula', 'south-east-melbourne'];
+    if (is_page($loc_landing_slugs)) {
+        wp_enqueue_style(
+            'xtechs-loc-landing',
+            get_template_directory_uri() . '/assets/css/location-landing.css',
+            ['xtechs-theme-main'],
+            $loc_landing_css_ver
+        );
+        wp_enqueue_script(
+            'xtechs-loc-process',
+            get_template_directory_uri() . '/assets/js/location-process.js',
+            [],
+            $loc_process_js_ver,
+            true
         );
     }
 
@@ -266,6 +290,8 @@ require_once get_template_directory() . '/inc/pv-segment-config.php';
 require_once get_template_directory() . '/inc/pv-landing.php';
 require_once get_template_directory() . '/inc/solarfold-page-resolve.php';
 require_once get_template_directory() . '/inc/theme-pages-seed.php';
+require_once get_template_directory() . '/inc/location-landing-config.php';
+require_once get_template_directory() . '/inc/location-process.php';
 require_once get_template_directory() . '/inc/xclasses-page-resolve.php';
 require_once get_template_directory() . '/inc/amber-electric-page-resolve.php';
 require_once get_template_directory() . '/inc/x-vrthing-page-resolve.php';

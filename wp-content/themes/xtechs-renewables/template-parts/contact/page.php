@@ -31,13 +31,23 @@ while (count($dates) < 24) {
                     <p data-xt-contact-sub>Schedule a professional site assessment for your solar, battery, or electrical project.</p>
 
                     <section class="xt-contact-step xt-contact-step-intent">
-                        <label class="xt-contact-field">
-                            <span>What would you like to do?</span>
-                            <select name="intent" required data-xt-intent>
-                                <option value="site-assessment">Book site assessment</option>
-                                <option value="message">Send a message</option>
-                            </select>
-                        </label>
+                        <p class="xt-contact-step-title">What would you like to do?</p>
+                        <div class="xt-contact-intent-options" role="radiogroup" aria-label="What would you like to do?">
+                            <label class="xt-contact-intent-option">
+                                <input type="radio" name="intent" value="site-assessment" required data-xt-intent-option />
+                                <span class="xt-contact-intent-body">
+                                    <span class="xt-contact-intent-check" aria-hidden="true"></span>
+                                    <span class="xt-contact-intent-text">Book site assessment</span>
+                                </span>
+                            </label>
+                            <label class="xt-contact-intent-option">
+                                <input type="radio" name="intent" value="message" required data-xt-intent-option />
+                                <span class="xt-contact-intent-body">
+                                    <span class="xt-contact-intent-check" aria-hidden="true"></span>
+                                    <span class="xt-contact-intent-text">Send a message</span>
+                                </span>
+                            </label>
+                        </div>
                     </section>
 
                     <section class="xt-contact-step" data-xt-booking-step>
@@ -121,7 +131,7 @@ while (count($dates) < 24) {
                             <textarea name="message" rows="4" placeholder="Tell us what you need..." required data-xt-message></textarea>
                         </label>
 
-                        <div class="xt-contact-note" data-xt-booking-step>
+                        <div class="xt-contact-note" hidden data-xt-booking-note>
                             <div class="xt-contact-note-ic" aria-hidden="true"><?php echo xtechs_pv_clone_icon('map-pin', 'xt-contact-note-svg'); ?></div>
                             <div>
                                 <p class="xt-contact-note-title">Site Assessment Details</p>

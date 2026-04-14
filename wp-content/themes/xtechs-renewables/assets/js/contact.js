@@ -4,18 +4,21 @@
 
   const contactRoot = qs(".xt-contact");
   const unifiedForm = qs("[data-xt-unified-form]");
-  const intentSelect = qs("[data-xt-intent]");
+  const intentInputs = qsa("[data-xt-intent-option]");
   const titleEl = qs("[data-xt-contact-title]");
   const subEl = qs("[data-xt-contact-sub]");
   const messageEl = qs("[data-xt-message]");
   const subjectEl = qs("[data-xt-subject]");
   const bookingSteps = qsa("[data-xt-booking-step]");
-  const bookingNote = qs(".xt-contact-note");
+  const bookingNote = qs("[data-xt-booking-note]");
   const bookingOnlyInputs = qsa(
     "[data-xt-booking-field] input, [data-xt-booking-field] select, [data-xt-booking-field] textarea"
   );
 
-  const currentIntent = () => (intentSelect ? intentSelect.value : "site-assessment");
+  const currentIntent = () => {
+    const selected = intentInputs.find((input) => input.checked);
+    return selected ? selected.value : "";
+  };
 
   // Booking
   const dateBtns = qsa("[data-xt-date]");
@@ -168,7 +171,7 @@
         if (timeLabel) timeLabel.textContent = selectedTime;
         if (formWrap) formWrap.hidden = false;
         if (bookingNote) {
-          bookingNote.hidden = !(selectedDate && selectedTime);
+          bookingNote.hidden = !(currentIntent() === "site-assessment" && selectedDate && selectedTime);
         }
         updateSubmitState();
       });
@@ -373,18 +376,22 @@
   const syncIntentUi = () => {
     const intent = currentIntent();
     const isBooking = intent === "site-assessment";
+    const hasIntent = intent !== "";
 
     bookingSteps.forEach((el) => {
-      el.hidden = !isBooking;
+      el.hidden = !hasIntent || !isBooking;
     });
 
-    if (!isBooking) {
+    if (formWrap) {
+      formWrap.hidden = !hasIntent || isBooking;
+    }
+
+    if (!hasIntent || !isBooking) {
       selectedDate = "";
       selectedTime = "";
       if (dateLabel) dateLabel.textContent = "";
       if (timeLabel) timeLabel.textContent = "";
       if (timesWrap) timesWrap.hidden = true;
-      if (formWrap) formWrap.hidden = false;
       if (bookingNote) bookingNote.hidden = true;
       qsa(".xt-contact-date").forEach((x) => {
         x.classList.remove("is-selected");
@@ -395,13 +402,13 @@
         x.setAttribute("aria-pressed", "false");
       });
     }
-    if (isBooking && bookingNote) {
-      bookingNote.hidden = !(selectedDate && selectedTime);
+    if (bookingNote) {
+      bookingNote.hidden = !(hasIntent && isBooking && selectedDate && selectedTime);
     }
 
     bookingOnlyInputs.forEach((el) => {
       if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement)) return;
-      if (isBooking) {
+      if (isBooking && hasIntent) {
         el.disabled = false;
         el.setAttribute("required", "required");
       } else {
@@ -411,27 +418,39 @@
       }
     });
 
-    if (subjectEl) subjectEl.required = !isBooking;
+    if (subjectEl) subjectEl.required = hasIntent && !isBooking;
     if (messageEl) {
       messageEl.placeholder = isBooking ? "Any specific requirements or questions..." : "Type your message here.";
     }
 
-    if (titleEl) titleEl.textContent = isBooking ? "Book Site Assessment" : "Contact Us";
-    if (subEl) {
-      subEl.textContent = isBooking
-        ? "Schedule a professional site assessment for your solar, battery, or electrical project."
-        : "Have questions about our services? Send us a message and we'll get back to you as soon as possible.";
+    if (titleEl) {
+      titleEl.textContent = !hasIntent
+        ? "Get in Touch"
+        : isBooking
+          ? "Book Site Assessment"
+          : "Contact Us";
     }
-    if (submitBtn) submitBtn.textContent = isBooking ? "Confirm Appointment" : "Send Message";
+    if (subEl) {
+      subEl.textContent = !hasIntent
+        ? "Choose an option below to continue."
+        : isBooking
+          ? "Schedule a professional site assessment for your solar, battery, or electrical project."
+          : "Have questions about our services? Send us a message and we'll get back to you as soon as possible.";
+    }
+    if (submitBtn) {
+      submitBtn.textContent = isBooking ? "Confirm Appointment" : "Send Message";
+    }
 
     setMsg("", true);
     updateSubmitState();
   };
 
-  if (intentSelect) {
-    intentSelect.addEventListener("change", () => {
-      syncIntentUi();
-      updateSubmitState();
+  if (intentInputs.length) {
+    intentInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        syncIntentUi();
+        updateSubmitState();
+      });
     });
   }
   syncIntentUi();
