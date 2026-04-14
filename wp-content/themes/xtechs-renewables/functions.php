@@ -1345,26 +1345,7 @@ add_action('template_redirect', function (): void {
         wp_send_json(['success' => false, 'message' => $msg], 500);
     }
 
-    $remote_error = '';
-    $remote_ok = xtechs_write_remote_contact_lead([
-        'id' => $lead_id,
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
-        'subject' => $subject,
-        'message' => $message,
-        'source' => $source,
-        'lead_type' => $lead_type,
-        'tenant_id' => $tenant_id,
-    ], $remote_error);
-    if (!$remote_ok) {
-        $msg = 'Saved locally but failed to sync remote lead';
-        if (xtechs_is_local_runtime_host() && $remote_error !== '') {
-            $msg .= ': ' . $remote_error;
-        }
-        wp_send_json(['success' => false, 'message' => $msg], 502);
-    }
-
+    // Notify by email as soon as the lead is saved locally (do not block on remote CRM).
     xtechs_resend_notify_contact_lead_success(
         $source,
         $first_name,
@@ -1379,5 +1360,33 @@ add_action('template_redirect', function (): void {
         $tenant_id
     );
 
-    wp_send_json(['success' => true], 200);
+    $remote_error = '';
+    $remote_ok = xtechs_write_remote_contact_lead([
+        'id' => $lead_id,
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'subject' => $subject,
+        'message' => $message,
+        'source' => $source,
+        'lead_type' => $lead_type,
+        'tenant_id' => $tenant_id,
+    ], $remote_error);
+
+    if (!$remote_ok) {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('xtechs_contact_api: remote lead sync failed: ' . $remote_error);
+        }
+        $payload = [
+            'success' => true,
+            'remoteSynced' => false,
+            'message' => __('Your enquiry was received. We will be in touch shortly.', 'xtechs-renewables'),
+        ];
+        if (xtechs_is_local_runtime_host() && $remote_error !== '') {
+            $payload['debug'] = $remote_error;
+        }
+        wp_send_json($payload, 200);
+    }
+
+    wp_send_json(['success' => true, 'remoteSynced' => true], 200);
 });
