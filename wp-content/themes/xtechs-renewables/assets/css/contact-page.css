@@ -1,0 +1,322 @@
+/* ——— Contact page clone (staging /contact) ——— */
+.xt-contact {
+  min-height: 100vh;
+  padding: 1.5rem 0 3rem;
+  background: #fff;
+  font-family: var(--font-body);
+}
+
+.xt-contact p,
+.xt-contact span,
+.xt-contact li,
+.xt-contact label,
+.xt-contact input,
+.xt-contact select,
+.xt-contact textarea,
+.xt-contact button {
+  font-family: var(--font-body);
+}
+
+.xt-contact h1,
+.xt-contact h2,
+.xt-contact h3,
+.xt-contact h4 {
+  font-family: var(--font-heading);
+}
+
+.xt-contact [hidden] {
+  display: none !important;
+}
+
+.xt-contact-inner {
+  max-width: 80rem;
+}
+
+.xt-contact-head {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.xt-contact-head h1 {
+  margin: 0 0 1rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.xt-contact-head p {
+  margin: 0 auto;
+  max-width: 48rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.xt-contact-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.xt-contact.is-contact-tab .xt-contact-head {
+  display: none;
+}
+
+.xt-contact.is-contact-tab .xt-contact-tabs {
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.xt-contact-tab {
+  appearance: none;
+  border: 0;
+  background: #fff;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.xt-contact-tab-ic {
+  width: 1rem;
+  height: 1rem;
+}
+
+.xt-contact-tab.is-active {
+  background: rgba(82, 182, 154, 0.22);
+  color: #111827;
+}
+
+.xt-contact-booking-card {
+  max-width: 72rem;
+  margin: 0 auto;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.xt-contact-step {
+  margin-top: 1.25rem;
+  background: rgba(82, 182, 154, 0.12);
+  border: 1px solid rgba(82, 182, 154, 0.45);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.xt-contact-step-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.xt-contact-step-ic {
+  width: 1rem;
+  height: 1rem;
+  color: #111827;
+}
+
+.xt-contact-booking-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.xt-contact-booking-card > p {
+  margin: 0 0 1.5rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.xt-contact-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 0.65rem;
+}
+
+@media (min-width: 640px) {
+  .xt-contact-dates {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .xt-contact-dates {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .xt-contact-dates {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.xt-contact-date {
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  min-height: 4.75rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.xt-contact-date:hover {
+  background: rgba(82, 182, 154, 0.18);
+  border-color: rgba(82, 182, 154, 0.75);
+  color: #05305f;
+}
+
+.xt-contact-date.is-selected {
+  background: #1a877e;
+  border-color: #1a877e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26, 135, 126, 0.25);
+}
+
+.xt-contact-date-dow {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.xt-contact-date-dm {
+  font-size: 0.8125rem;
+}
+
+.xt-contact-date-today {
+  font-size: 0.625rem;
+  color: #1a877e;
+  font-weight: 600;
+}
+
+.xt-contact-date.is-today {
+  background: rgba(82, 182, 154, 0.22);
+  border-color: rgba(82, 182, 154, 0.6);
+  color: #0f172a;
+}
+
+.xt-contact-date.is-selected .xt-contact-date-today {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.xt-contact-form {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.xt-contact-form-grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .xt-contact-form-grid2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.xt-contact-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.xt-contact-field > span {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.xt-contact-file-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.xt-contact-file-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #1a877e;
+  border-radius: 0.45rem;
+  background: #1a877e;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.xt-contact-file-btn input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.xt-contact-file-name {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.xt-contact-upload-title {
+  font-weight: 700;
+}
+
+.xt-contact-submit {
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #1a877e;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.xt-contact-submit:hover:not(:disabled) {
+  background: #166d66;
+}
+
+.xt-contact-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

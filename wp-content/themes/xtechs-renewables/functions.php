@@ -79,13 +79,26 @@ add_action('wp_enqueue_scripts', 'xtechs_enqueue_assets');
 function xtechs_enqueue_assets() {
     $critical_css_path = get_template_directory() . '/assets/css/critical.css';
     $global_css_path = get_template_directory() . '/assets/css/global.css';
+    $global_css_min_path = get_template_directory() . '/assets/css/global.min.css';
     $legal_css_path = get_template_directory() . '/assets/css/legal-pages.css';
     $locations_css_path = get_template_directory() . '/assets/css/locations-pages.css';
     $loc_landing_css_path = get_template_directory() . '/assets/css/location-landing.css';
+    $contact_css_path = get_template_directory() . '/assets/css/contact-page.css';
+    $contact_css_min_path = get_template_directory() . '/assets/css/contact-page.min.css';
+    $home_interactive_css_path = get_template_directory() . '/assets/css/home-interactive.css';
+    $home_interactive_css_min_path = get_template_directory() . '/assets/css/home-interactive.min.css';
+    $xclasses_css_path = get_template_directory() . '/assets/css/xclasses.css';
+    $xvrthing_css_path = get_template_directory() . '/assets/css/x-vrthing.css';
     $loc_process_js_path = get_template_directory() . '/assets/js/location-process.js';
     $theme_js_path = get_template_directory() . '/assets/js/theme.js';
+    $theme_js_min_path = get_template_directory() . '/assets/js/theme.min.js';
+    $theme_home_js_path = get_template_directory() . '/assets/js/theme-home.js';
+    $theme_home_js_min_path = get_template_directory() . '/assets/js/theme-home.min.js';
+    $theme_pv_js_path = get_template_directory() . '/assets/js/theme-pv.js';
+    $theme_pv_js_min_path = get_template_directory() . '/assets/js/theme-pv.min.js';
     $about_js_path = get_template_directory() . '/assets/js/about.js';
     $contact_js_path = get_template_directory() . '/assets/js/contact.js';
+    $contact_js_min_path = get_template_directory() . '/assets/js/contact.min.js';
     $local_partner_js_path = get_template_directory() . '/assets/js/local-business-partners.js';
     $chatbot_js_path = get_template_directory() . '/assets/js/chatbot.js';
     $cookie_js_path = get_template_directory() . '/assets/js/cookie-consent.js';
@@ -97,9 +110,13 @@ function xtechs_enqueue_assets() {
     $critical_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($critical_css_path) ? (string) filemtime($critical_css_path) : XTECHS_THEME_VERSION);
+    $active_global_css_path = file_exists($global_css_min_path) ? $global_css_min_path : $global_css_path;
+    $active_global_css_uri = file_exists($global_css_min_path)
+        ? get_template_directory_uri() . '/assets/css/global.min.css'
+        : get_template_directory_uri() . '/assets/css/global.css';
     $global_css_ver = $disable_asset_cache
         ? $runtime_ver
-        : (file_exists($global_css_path) ? (string) filemtime($global_css_path) : XTECHS_THEME_VERSION);
+        : (file_exists($active_global_css_path) ? (string) filemtime($active_global_css_path) : XTECHS_THEME_VERSION);
     $legal_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($legal_css_path) ? (string) filemtime($legal_css_path) : XTECHS_THEME_VERSION);
@@ -109,18 +126,60 @@ function xtechs_enqueue_assets() {
     $loc_landing_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($loc_landing_css_path) ? (string) filemtime($loc_landing_css_path) : XTECHS_THEME_VERSION);
+    $active_contact_css_path = file_exists($contact_css_min_path) ? $contact_css_min_path : $contact_css_path;
+    $active_contact_css_uri = file_exists($contact_css_min_path)
+        ? get_template_directory_uri() . '/assets/css/contact-page.min.css'
+        : get_template_directory_uri() . '/assets/css/contact-page.css';
+    $contact_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($active_contact_css_path) ? (string) filemtime($active_contact_css_path) : XTECHS_THEME_VERSION);
+    $active_home_interactive_css_path = file_exists($home_interactive_css_min_path) ? $home_interactive_css_min_path : $home_interactive_css_path;
+    $active_home_interactive_css_uri = file_exists($home_interactive_css_min_path)
+        ? get_template_directory_uri() . '/assets/css/home-interactive.min.css'
+        : get_template_directory_uri() . '/assets/css/home-interactive.css';
+    $home_interactive_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($active_home_interactive_css_path) ? (string) filemtime($active_home_interactive_css_path) : XTECHS_THEME_VERSION);
+    $xclasses_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($xclasses_css_path) ? (string) filemtime($xclasses_css_path) : XTECHS_THEME_VERSION);
+    $xvrthing_css_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($xvrthing_css_path) ? (string) filemtime($xvrthing_css_path) : XTECHS_THEME_VERSION);
     $loc_process_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($loc_process_js_path) ? (string) filemtime($loc_process_js_path) : XTECHS_THEME_VERSION);
+    $active_theme_js_path = file_exists($theme_js_min_path) ? $theme_js_min_path : $theme_js_path;
+    $active_theme_js_uri = file_exists($theme_js_min_path)
+        ? get_template_directory_uri() . '/assets/js/theme.min.js'
+        : get_template_directory_uri() . '/assets/js/theme.js';
     $theme_js_ver = $disable_asset_cache
         ? $runtime_ver
-        : (file_exists($theme_js_path) ? (string) filemtime($theme_js_path) : XTECHS_THEME_VERSION);
+        : (file_exists($active_theme_js_path) ? (string) filemtime($active_theme_js_path) : XTECHS_THEME_VERSION);
+    $active_theme_home_js_path = file_exists($theme_home_js_min_path) ? $theme_home_js_min_path : $theme_home_js_path;
+    $active_theme_home_js_uri = file_exists($theme_home_js_min_path)
+        ? get_template_directory_uri() . '/assets/js/theme-home.min.js'
+        : get_template_directory_uri() . '/assets/js/theme-home.js';
+    $theme_home_js_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($active_theme_home_js_path) ? (string) filemtime($active_theme_home_js_path) : XTECHS_THEME_VERSION);
+    $active_theme_pv_js_path = file_exists($theme_pv_js_min_path) ? $theme_pv_js_min_path : $theme_pv_js_path;
+    $active_theme_pv_js_uri = file_exists($theme_pv_js_min_path)
+        ? get_template_directory_uri() . '/assets/js/theme-pv.min.js'
+        : get_template_directory_uri() . '/assets/js/theme-pv.js';
+    $theme_pv_js_ver = $disable_asset_cache
+        ? $runtime_ver
+        : (file_exists($active_theme_pv_js_path) ? (string) filemtime($active_theme_pv_js_path) : XTECHS_THEME_VERSION);
     $about_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($about_js_path) ? (string) filemtime($about_js_path) : XTECHS_THEME_VERSION);
+    $active_contact_js_path = file_exists($contact_js_min_path) ? $contact_js_min_path : $contact_js_path;
+    $active_contact_js_uri = file_exists($contact_js_min_path)
+        ? get_template_directory_uri() . '/assets/js/contact.min.js'
+        : get_template_directory_uri() . '/assets/js/contact.js';
     $contact_js_ver = $disable_asset_cache
         ? $runtime_ver
-        : (file_exists($contact_js_path) ? (string) filemtime($contact_js_path) : XTECHS_THEME_VERSION);
+        : (file_exists($active_contact_js_path) ? (string) filemtime($active_contact_js_path) : XTECHS_THEME_VERSION);
     $local_partner_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($local_partner_js_path) ? (string) filemtime($local_partner_js_path) : XTECHS_THEME_VERSION);
@@ -143,7 +202,7 @@ function xtechs_enqueue_assets() {
     );
     wp_enqueue_style(
         'xtechs-theme-main',
-        get_template_directory_uri() . '/assets/css/global.css',
+        $active_global_css_uri,
         ['xtechs-theme-critical'],
         $global_css_ver
     );
@@ -179,14 +238,65 @@ function xtechs_enqueue_assets() {
             true
         );
     }
+    if (is_page('x-vrthing')) {
+        wp_enqueue_style(
+            'xtechs-xvrthing-page',
+            get_template_directory_uri() . '/assets/css/x-vrthing.css',
+            ['xtechs-theme-main'],
+            $xvrthing_css_ver
+        );
+    }
+    if (is_page('x-classes')) {
+        wp_enqueue_style(
+            'xtechs-xclasses-page',
+            get_template_directory_uri() . '/assets/css/xclasses.css',
+            ['xtechs-theme-main'],
+            $xclasses_css_ver
+        );
+    }
+    if (is_page('contact')) {
+        wp_enqueue_style(
+            'xtechs-contact-page',
+            $active_contact_css_uri,
+            ['xtechs-theme-main'],
+            $contact_css_ver
+        );
+    }
+    if (is_front_page() || is_home()) {
+        wp_enqueue_style(
+            'xtechs-home-interactive',
+            $active_home_interactive_css_uri,
+            ['xtechs-theme-main'],
+            $home_interactive_css_ver
+        );
+    }
 
     wp_enqueue_script(
         'xtechs-theme-main',
-        get_template_directory_uri() . '/assets/js/theme.js',
+        $active_theme_js_uri,
         [],
         $theme_js_ver,
         true
     );
+    if (is_front_page() || is_home()) {
+        wp_enqueue_script(
+            'xtechs-theme-home',
+            $active_theme_home_js_uri,
+            ['xtechs-theme-main'],
+            $theme_home_js_ver,
+            true
+        );
+    }
+    $pv_page_slugs = ['pv-battery', 'battery', 'ev-chargers', 'residential', 'business', 'off-grid', 'builders'];
+    if (is_page($pv_page_slugs)) {
+        wp_enqueue_script(
+            'xtechs-theme-pv',
+            $active_theme_pv_js_uri,
+            ['xtechs-theme-main'],
+            $theme_pv_js_ver,
+            true
+        );
+    }
 
     wp_enqueue_script(
         'xtechs-cookie-consent',
@@ -239,7 +349,7 @@ function xtechs_enqueue_assets() {
         }
         wp_enqueue_script(
             'xtechs-contact',
-            get_template_directory_uri() . '/assets/js/contact.js',
+            $active_contact_js_uri,
             $ga4_dep,
             $contact_js_ver,
             true
@@ -281,6 +391,8 @@ function xtechs_enqueue_assets() {
     ]);
 
     xtechs_mark_script_defer('xtechs-theme-main');
+    xtechs_mark_script_defer('xtechs-theme-home');
+    xtechs_mark_script_defer('xtechs-theme-pv');
     xtechs_mark_script_defer('xtechs-cookie-consent');
     xtechs_mark_script_defer('xtechs-contact');
     xtechs_mark_script_defer('xtechs-about');
@@ -364,6 +476,30 @@ function xtechs_optimize_html_img_tags(string $html): string {
         }
         if (stripos($tag, 'fetchpriority=') === false) {
             $tag = $append_attr($tag, $is_lcp_candidate ? 'fetchpriority="high"' : 'fetchpriority="low"');
+        }
+
+        if (preg_match('/\bsrc=(["\'])(.*?)\1/i', $tag, $src_match)) {
+            $src_url = (string) $src_match[2];
+            $theme_uri = rtrim((string) get_template_directory_uri(), '/');
+            if (strpos($src_url, $theme_uri . '/assets/') === 0) {
+                $relative_path = substr($src_url, strlen($theme_uri));
+                $optimized_src = xtechs_theme_asset_url((string) $relative_path);
+                if ($optimized_src !== $src_url) {
+                    $tag = str_replace($src_match[0], 'src="' . esc_url($optimized_src) . '"', $tag);
+                    $src_url = $optimized_src;
+                }
+            }
+            if (stripos($tag, 'width=') === false || stripos($tag, 'height=') === false) {
+                $dims = xtechs_theme_image_dimensions_by_url($src_url);
+                if (is_array($dims)) {
+                    if (stripos($tag, 'width=') === false) {
+                        $tag = $append_attr($tag, 'width="' . (int) $dims[0] . '"');
+                    }
+                    if (stripos($tag, 'height=') === false) {
+                        $tag = $append_attr($tag, 'height="' . (int) $dims[1] . '"');
+                    }
+                }
+            }
         }
 
         return $tag;
@@ -511,9 +647,115 @@ function xtechs_icon_facebook(): string {
 }
 
 add_action('wp_head', function () {
-    $logo = get_template_directory_uri() . '/assets/media/xlogo.png';
-    echo '<link rel="preload" as="image" href="' . esc_url($logo) . '" type="image/png" fetchpriority="high" />' . "\n";
+    $preload_rel = '/assets/media/xlogo.png';
+    if (is_page('solarfold') || is_page(['solarfold', 'mobil-grid', 'solar-hybrid-box'])) {
+        $preload_rel = '/assets/media/solarfold-hero.jpg';
+    } elseif (is_page('x-vrthing')) {
+        $preload_rel = '/assets/media/x-vrthing-hero.jpg';
+    } elseif (is_page('about')) {
+        $preload_rel = '/assets/media/team.png';
+    } elseif (is_front_page() || is_home()) {
+        $preload_rel = '/assets/media/xlogo.png';
+    }
+
+    $preload_url = xtechs_theme_asset_url($preload_rel);
+    $mime = 'image/webp';
+    if (preg_match('/\.(png)$/i', $preload_url)) {
+        $mime = 'image/png';
+    } elseif (preg_match('/\.(jpe?g)$/i', $preload_url)) {
+        $mime = 'image/jpeg';
+    }
+    echo '<link rel="preload" as="image" href="' . esc_url($preload_url) . '" type="' . esc_attr($mime) . '" fetchpriority="high" />' . "\n";
 }, 1);
+
+/**
+ * Return a theme asset URL and prefer sibling .webp files when available.
+ */
+function xtechs_theme_asset_url(string $relative_path): string {
+    $relative_path = '/' . ltrim($relative_path, '/');
+    $asset_url = get_template_directory_uri() . $relative_path;
+
+    $ext = strtolower((string) pathinfo($relative_path, PATHINFO_EXTENSION));
+    if (!in_array($ext, ['jpg', 'jpeg', 'png'], true)) {
+        return $asset_url;
+    }
+
+    $webp_relative_path = (string) preg_replace('/\.(jpe?g|png)$/i', '.webp', $relative_path);
+    $webp_absolute_path = get_template_directory() . $webp_relative_path;
+    if (is_readable($webp_absolute_path)) {
+        return get_template_directory_uri() . $webp_relative_path;
+    }
+
+    return $asset_url;
+}
+
+/**
+ * Resolve theme asset image dimensions from a URL.
+ */
+function xtechs_theme_image_dimensions_by_url(string $asset_url): ?array {
+    static $dims_cache = [];
+    if (isset($dims_cache[$asset_url])) {
+        return $dims_cache[$asset_url];
+    }
+
+    $theme_uri = rtrim((string) get_template_directory_uri(), '/');
+    if (strpos($asset_url, $theme_uri . '/assets/') !== 0) {
+        $dims_cache[$asset_url] = null;
+        return null;
+    }
+
+    $relative_path = substr($asset_url, strlen($theme_uri));
+    $absolute_path = get_template_directory() . $relative_path;
+    if (!is_readable($absolute_path)) {
+        $dims_cache[$asset_url] = null;
+        return null;
+    }
+
+    $size = @getimagesize($absolute_path);
+    if (!is_array($size) || empty($size[0]) || empty($size[1])) {
+        $dims_cache[$asset_url] = null;
+        return null;
+    }
+
+    $dims_cache[$asset_url] = [(int) $size[0], (int) $size[1]];
+    return $dims_cache[$asset_url];
+}
+
+/**
+ * Build srcset string from generated width variants (e.g. image-640.webp).
+ */
+function xtechs_theme_asset_srcset(string $relative_path, array $widths): string {
+    $srcset_parts = [];
+    $preferred_url = xtechs_theme_asset_url($relative_path);
+    $theme_uri = rtrim((string) get_template_directory_uri(), '/');
+    $preferred_rel = (strpos($preferred_url, $theme_uri) === 0)
+        ? substr($preferred_url, strlen($theme_uri))
+        : ('/' . ltrim($relative_path, '/'));
+    $ext = strtolower((string) pathinfo($preferred_rel, PATHINFO_EXTENSION));
+    $base_rel = (string) preg_replace('/\.[^.]+$/', '', $preferred_rel);
+
+    foreach ($widths as $width) {
+        $w = (int) $width;
+        if ($w <= 0) {
+            continue;
+        }
+        $variant_rel = $base_rel . '-' . $w . '.' . $ext;
+        $variant_abs = get_template_directory() . $variant_rel;
+        if (!is_readable($variant_abs)) {
+            continue;
+        }
+        $srcset_parts[] = esc_url(get_template_directory_uri() . $variant_rel) . ' ' . $w . 'w';
+    }
+
+    $dims = xtechs_theme_image_dimensions_by_url($preferred_url);
+    if (is_array($dims) && isset($dims[0])) {
+        $srcset_parts[] = esc_url($preferred_url) . ' ' . (int) $dims[0] . 'w';
+    } else {
+        $srcset_parts[] = esc_url($preferred_url) . ' 1600w';
+    }
+
+    return implode(', ', array_unique($srcset_parts));
+}
 
 function xtechs_primary_menu_fallback() {
     echo '<ul>';

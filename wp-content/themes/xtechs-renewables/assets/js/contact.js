@@ -11,6 +11,7 @@
   const subjectEl = qs("[data-xt-subject]");
   const bookingSteps = qsa("[data-xt-booking-step]");
   const bookingNote = qs("[data-xt-booking-note]");
+  const bookingOnlyBlocks = qsa("[data-xt-booking-only]");
   const bookingOnlyInputs = qsa(
     "[data-xt-booking-field] input, [data-xt-booking-field] select, [data-xt-booking-field] textarea"
   );
@@ -377,6 +378,7 @@
     const intent = currentIntent();
     const isBooking = intent === "site-assessment";
     const hasIntent = intent !== "";
+    const showBookingOnly = hasIntent && isBooking;
 
     bookingSteps.forEach((el) => {
       el.hidden = !hasIntent || !isBooking;
@@ -402,13 +404,16 @@
         x.setAttribute("aria-pressed", "false");
       });
     }
+    bookingOnlyBlocks.forEach((el) => {
+      el.hidden = !showBookingOnly;
+    });
     if (bookingNote) {
-      bookingNote.hidden = !(hasIntent && isBooking && selectedDate && selectedTime);
+      bookingNote.hidden = !showBookingOnly || !selectedDate || !selectedTime;
     }
 
     bookingOnlyInputs.forEach((el) => {
       if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement)) return;
-      if (isBooking && hasIntent) {
+      if (showBookingOnly) {
         el.disabled = false;
         el.setAttribute("required", "required");
       } else {
@@ -418,7 +423,12 @@
       }
     });
 
-    if (subjectEl) subjectEl.required = hasIntent && !isBooking;
+    if (subjectEl) {
+      subjectEl.required = false;
+      if (!showBookingOnly) {
+        subjectEl.value = "";
+      }
+    }
     if (messageEl) {
       messageEl.placeholder = isBooking ? "Any specific requirements or questions..." : "Type your message here.";
     }

@@ -13,9 +13,11 @@
         <div class="hero-media">
             <?php
             $hero_path = get_template_directory() . '/assets/media/coming-soon-hero.jpg';
+            $hero_src = xtechs_theme_asset_url('/assets/media/coming-soon-hero.jpg');
+            $hero_srcset = xtechs_theme_asset_srcset('/assets/media/coming-soon-hero.jpg', [640, 960, 1280]);
             if (file_exists($hero_path)) :
             ?>
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/media/coming-soon-hero.jpg'); ?>" alt="Renewable energy solutions" />
+                <img src="<?php echo esc_url($hero_src); ?>" srcset="<?php echo esc_attr($hero_srcset); ?>" sizes="(max-width: 1023px) 100vw, 50vw" alt="Renewable energy solutions" fetchpriority="high" decoding="async" />
             <?php else : ?>
                 <div class="placeholder-card">Hero image placeholder</div>
             <?php endif; ?>

@@ -104,11 +104,11 @@ while (count($dates) < 24) {
                                 <input type="tel" name="phone" required />
                             </label>
                         </div>
-                        <label class="xt-contact-field" data-xt-booking-field>
+                        <label class="xt-contact-field" data-xt-booking-only data-xt-booking-field>
                             <span>Property Address *</span>
                             <input type="text" name="address" placeholder="Full address for site assessment" required />
                         </label>
-                        <label class="xt-contact-field" data-xt-booking-field>
+                        <label class="xt-contact-field" data-xt-booking-only data-xt-booking-field>
                             <span>Service Type *</span>
                             <select name="serviceType" required>
                                 <option value="">Select a service</option>
@@ -122,7 +122,7 @@ while (count($dates) < 24) {
                                 <option>Builder Services</option>
                             </select>
                         </label>
-                        <label class="xt-contact-field">
+                        <label class="xt-contact-field" data-xt-booking-only>
                             <span>Subject</span>
                             <input type="text" name="subject" placeholder="Subject (optional for bookings)" data-xt-subject />
                         </label>
@@ -131,7 +131,7 @@ while (count($dates) < 24) {
                             <textarea name="message" rows="4" placeholder="Tell us what you need..." required data-xt-message></textarea>
                         </label>
 
-                        <div class="xt-contact-note" hidden data-xt-booking-note>
+                        <div class="xt-contact-note" hidden data-xt-booking-only data-xt-booking-note>
                             <div class="xt-contact-note-ic" aria-hidden="true"><?php echo xtechs_pv_clone_icon('map-pin', 'xt-contact-note-svg'); ?></div>
                             <div>
                                 <p class="xt-contact-note-title">Site Assessment Details</p>

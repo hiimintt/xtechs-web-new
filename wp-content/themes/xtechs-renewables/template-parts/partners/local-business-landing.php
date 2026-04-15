@@ -5,8 +5,6 @@ if (!defined('ABSPATH')) {
 
 $partner_name = 'Grounded Grocer';
 $partner_slug = 'grounded-grocer';
-/** CRM/email source tag; must match JS leadSource (partner_{slug_with_underscores}). */
-$partner_lead_source = 'partner_' . str_replace('-', '_', $partner_slug);
 $partner_logo = get_template_directory_uri() . '/assets/media/partners/grounded-cafe.png';
 $xlogo = get_template_directory_uri() . '/assets/media/xlogo.png';
 ?>
@@ -276,7 +274,7 @@ $xlogo = get_template_directory_uri() . '/assets/media/xlogo.png';
 
                                 <input type="hidden" name="partnerSlug" value="<?php echo esc_attr($partner_slug); ?>" />
                                 <input type="hidden" name="partnerName" value="<?php echo esc_attr($partner_name); ?>" />
-                                <input type="hidden" name="leadSource" value="<?php echo esc_attr($partner_lead_source); ?>" />
+                                <input type="hidden" name="leadSource" value="partner_grounded_grocer" />
                             </form>
                         </article>
                     </div>

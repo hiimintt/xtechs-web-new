@@ -452,7 +452,8 @@ if (isset($product_pages[$key])) :
     $tpl_dir = get_template_directory();
     $hero_rel = (string) $page['hero_image'];
     $hero_abs = $tpl_dir . $hero_rel;
-    $hero_url = $tpl_uri . $hero_rel;
+    $hero_url = xtechs_theme_asset_url($hero_rel);
+    $hero_srcset = xtechs_theme_asset_srcset($hero_rel, [640, 960, 1280]);
     $hero_vh = (string) $page['hero_vh'];
     $vh_class = $hero_vh === '70' ? 'xt-sf-prod-hero--vh70' : 'xt-sf-prod-hero--vh60';
     $gallery = isset($page['gallery']) && is_array($page['gallery']) ? $page['gallery'] : [];
@@ -464,7 +465,7 @@ if (isset($product_pages[$key])) :
             <div class="xt-sf-prod-hero-grid">
                 <div class="xt-sf-prod-hero-media">
                     <?php if (is_readable($hero_abs)) : ?>
-                        <img class="xt-sf-prod-hero-img" src="<?php echo esc_url($hero_url); ?>" alt="<?php echo esc_attr($page['hero_image_alt']); ?>" width="1600" height="900" decoding="async" fetchpriority="high" />
+                        <img class="xt-sf-prod-hero-img" src="<?php echo esc_url($hero_url); ?>" srcset="<?php echo esc_attr($hero_srcset); ?>" sizes="100vw" alt="<?php echo esc_attr($page['hero_image_alt']); ?>" width="1600" height="900" decoding="async" fetchpriority="high" />
                     <?php else : ?>
                         <div class="xt-sf-prod-hero-ph" role="img" aria-label="<?php echo esc_attr($page['hero_image_alt']); ?>"></div>
                     <?php endif; ?>
@@ -523,7 +524,7 @@ if (isset($product_pages[$key])) :
                                         <?php
                                         $rel = (string) $img[0];
                                         $alt = (string) $img[1];
-                                        $full = $tpl_uri . $rel;
+                                        $full = xtechs_theme_asset_url($rel);
                                         ?>
                                         <button type="button" class="xt-ias-item" data-full-src="<?php echo esc_url($full); ?>" data-full-alt="<?php echo esc_attr($alt); ?>" aria-label="<?php echo esc_attr(sprintf(__('View full size image: %s', 'xtechs-renewables'), $alt)); ?>">
                                             <img src="<?php echo esc_url($full); ?>" alt="<?php echo esc_attr($alt); ?>" loading="<?php echo $idx < 2 ? 'eager' : 'lazy'; ?>" decoding="async" width="400" height="400" />
@@ -604,7 +605,7 @@ if (isset($product_pages[$key])) :
                 <?php
                 $app_img_rel = (string) $page['image'];
                 $app_img_abs = get_template_directory() . $app_img_rel;
-                $app_img_url = get_template_directory_uri() . $app_img_rel;
+                $app_img_url = xtechs_theme_asset_url($app_img_rel);
                 ?>
                 <div class="xt-sf-app-media">
                     <?php if (file_exists($app_img_abs)) : ?>

@@ -146,7 +146,7 @@ $faq = [
                 <?php foreach ($videos as $video) : ?>
                     <article class="xt-xc-video-card" data-category="<?php echo esc_attr($video['category']); ?>">
                         <a class="xt-xc-video-thumb" href="<?php echo esc_url('https://www.youtube.com/watch?v=' . $video['youtube']); ?>" target="_blank" rel="noopener noreferrer">
-                            <img src="<?php echo esc_url('https://img.youtube.com/vi/' . $video['youtube'] . '/maxresdefault.jpg'); ?>" alt="<?php echo esc_attr($video['title']); ?>" />
+                            <img src="<?php echo esc_url('https://img.youtube.com/vi/' . $video['youtube'] . '/hqdefault.jpg'); ?>" alt="<?php echo esc_attr($video['title']); ?>" />
                         </a>
                         <div class="xt-xc-video-body">
                             <span class="xt-xc-badge"><?php echo esc_html($video['category']); ?></span>

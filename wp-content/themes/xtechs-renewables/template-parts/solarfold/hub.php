@@ -54,14 +54,22 @@ $applications = [
 <?php
 $hero_img_rel = '/assets/media/solarfold-hero.jpg';
 $hero_img_abs = get_template_directory() . $hero_img_rel;
-$hero_img_url = get_template_directory_uri() . $hero_img_rel;
+$hero_img_url = xtechs_theme_asset_url($hero_img_rel);
+$hero_img_srcset = xtechs_theme_asset_srcset($hero_img_rel, [640, 960, 1280]);
 $hero_has_image = file_exists($hero_img_abs);
 ?>
 <section class="xt-sf-hero-main">
     <div class="xt-sf-hero-main-grid">
         <div class="xt-sf-hero-media<?php echo $hero_has_image ? '' : ' xt-sf-hero-media-fallback'; ?>">
             <?php if ($hero_has_image) : ?>
-                <img src="<?php echo esc_url($hero_img_url); ?>" alt="SolarFold rapid-deploy solar array" />
+                <img
+                    src="<?php echo esc_url($hero_img_url); ?>"
+                    srcset="<?php echo esc_attr($hero_img_srcset); ?>"
+                    sizes="(max-width: 767px) 100vw, 50vw"
+                    alt="SolarFold rapid-deploy solar array"
+                    fetchpriority="high"
+                    decoding="async"
+                />
             <?php endif; ?>
         </div>
         <div class="xt-sf-hero-content">
@@ -159,7 +167,7 @@ $hero_has_image = file_exists($hero_img_abs);
                     <?php
                     $image_rel = (string) $product['image'];
                     $image_abs = get_template_directory() . $image_rel;
-                    $image_url = get_template_directory_uri() . $image_rel;
+                    $image_url = xtechs_theme_asset_url($image_rel);
                     ?>
                     <div class="xt-sf-card-image">
                         <?php if (file_exists($image_abs)) : ?>

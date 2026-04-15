@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 $hero_rel = '/assets/media/x-vrthing-hero.jpg';
 $hero_abs = get_template_directory() . $hero_rel;
-$hero_url = (is_readable($hero_abs)) ? get_template_directory_uri() . $hero_rel : '';
+$hero_url = (is_readable($hero_abs)) ? xtechs_theme_asset_url($hero_rel) : '';
 $ic_sparkles = '<svg class="xt-xv-sparkles" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>';
 ?>
 

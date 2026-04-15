@@ -1,0 +1,1062 @@
+/* ——— Calculator + reviews ——— */
+.xt-calc-header {
+  text-align: center;
+  padding: 0.75rem 0;
+}
+
+#calculator-tile .xt-container-narrow {
+  max-width: 72rem;
+}
+
+.xt-calc-title {
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #022b47;
+}
+
+.xt-calc-sub {
+  margin: 0.2rem 0 0;
+  color: #385785;
+  font-size: clamp(0.95rem, 1.2vw, 1.55rem);
+}
+
+.xt-calc-shell {
+  margin-top: 1rem;
+  padding: 1rem 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.xt-calc-shell-3col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .xt-calc-shell-3col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+}
+
+.xt-calc-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-content: stretch;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .xt-calc-card {
+    min-height: 640px;
+  }
+}
+
+.xt-calc-card-rebates #xt-calc-run {
+  margin-top: auto;
+}
+
+.xt-calc-card-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.xt-calc-card-ico {
+  flex-shrink: 0;
+  display: inline-flex;
+  margin-top: 0.12rem;
+}
+
+.xt-calc-card-ico-blue {
+  color: #2563eb;
+}
+
+.xt-calc-rebates-ico {
+  color: #16a34a;
+}
+
+.xt-calc-card-heading-text {
+  min-width: 0;
+}
+
+.xt-req {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.xt-calc-input-mono {
+  text-align: center;
+  font-size: 1.05rem !important;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.06em;
+}
+
+.xt-calc-zone-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+}
+
+.xt-calc-zone-row.is-hidden {
+  display: none;
+}
+
+.xt-calc-zone-check {
+  display: inline-flex;
+  color: #16a34a;
+}
+
+.xt-badge-zone {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.xt-calc-postcode-err {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+.xt-calc-postcode-err.is-hidden {
+  display: none;
+}
+
+.xt-calc-postcode-err-ico {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: #dc2626;
+}
+
+.xt-calc-card-rebates .xt-calc-output {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  gap: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.xt-calc-card-rebates .xt-calc-empty {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  min-height: 200px;
+  padding: 2rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.xt-calc-card-rebates .xt-calc-empty p {
+  font-size: 0.875rem;
+  color: #64748b;
+  max-width: 18rem;
+}
+
+.xt-calc-card-title {
+  font-size: clamp(1.1rem, 1vw, 1.35rem);
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.xt-calc-card-sub {
+  margin: 0.25rem 0 0;
+  font-size: clamp(0.8125rem, 0.78vw, 0.9375rem);
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.xt-calc-field {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.xt-calc-field label {
+  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 0.85vw, 1.2rem);
+  font-weight: 600;
+  color: #0f2740;
+}
+
+.xt-calc-field input:not([type="range"]),
+.xt-calc-field select {
+  appearance: none;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.72rem;
+  font-size: clamp(0.9rem, 0.78vw, 1.05rem);
+  color: #0f172a;
+  background: #fff;
+}
+
+.xt-calc-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  padding-right: 2.25rem;
+}
+
+.xt-calc-field input:focus,
+.xt-calc-field select:focus {
+  outline: 2px solid color-mix(in srgb, var(--brand-primary) 25%, transparent);
+  border-color: var(--brand-primary);
+}
+
+.xt-calc-inline {
+  display: flex;
+  align-items: center;
+}
+
+.xt-badge-soft {
+  display: inline-flex;
+  border: 1px solid #c8ece8;
+  background: #ecfeff;
+  color: #0e7490;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+}
+
+.xt-calc-check label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: clamp(0.95rem, 0.82vw, 1.1rem);
+  color: #334155;
+}
+
+.xt-calc-check input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+.xt-check-icon {
+  display: inline-flex;
+  color: #0f172a;
+}
+
+.xt-calc-range-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  color: #64748b;
+}
+
+.xt-calc-mini {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #64748b;
+}
+
+.xt-calc-elig {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.xt-calc-elig p {
+  margin: 0;
+  font-size: clamp(0.95rem, 0.82vw, 1.1rem);
+  font-weight: 700;
+  color: #0f2740;
+}
+
+.xt-calc-elig label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: clamp(0.875rem, 0.78vw, 0.9375rem);
+  color: #334155;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.xt-calc-elig label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0.15rem 0 0;
+  flex-shrink: 0;
+  accent-color: #2563eb;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.xt-calc-output {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.xt-calc-output.is-hidden {
+  display: none;
+}
+
+.xt-calc-empty {
+  border: 1px solid #dbe4ea;
+  border-radius: 0.75rem;
+  background: #fff;
+  min-height: 310px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+.xt-calc-empty.is-hidden {
+  display: none;
+}
+
+.xt-calc-empty p {
+  margin: 0.5rem 0 0;
+  color: #6b7280;
+  font-size: 1.25rem;
+  max-width: 17rem;
+  line-height: 1.4;
+}
+
+.xt-calc-empty-icon {
+  opacity: 0.85;
+}
+
+.xt-calc-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.xt-calc-result-row p {
+  margin: 0;
+  font-size: clamp(0.92rem, 0.76vw, 1.05rem);
+  color: #475569;
+}
+
+.xt-calc-result-row strong {
+  font-size: clamp(0.95rem, 0.84vw, 1.15rem);
+  color: #0f172a;
+}
+
+.xt-calc-result-total strong {
+  font-size: 1.1rem;
+  color: #00a78f;
+}
+
+.xt-calc-disclaimer {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.xt-calc-output .xt-btn {
+  margin-top: 0.4rem;
+}
+
+.xt-rebate-panel {
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 1rem;
+}
+
+.xt-rebate-panel h4 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #0c2f55;
+}
+
+.xt-rebate-panel p {
+  margin: 0.3rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  color: #55657f;
+}
+
+.xt-rebate-sv {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.xt-rebate-fed {
+  background: linear-gradient(to bottom right, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+}
+
+.xt-rebate-sv h4 {
+  color: #14532d;
+}
+
+.xt-rebate-sv p {
+  color: #c14f00;
+}
+
+#xt-calc-sv-status.is-eligible {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #15803d;
+  font-weight: 600;
+}
+
+#xt-calc-sv-status.is-eligible .xt-calc-sv-check {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+.xt-rebate-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.xt-info-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.xt-info-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #94a3b8;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 14px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: help;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.xt-info-dot:hover,
+.xt-info-wrap:hover .xt-info-dot {
+  color: #475569;
+  border-color: #64748b;
+}
+
+.xt-info-dot:focus {
+  outline: none;
+}
+
+.xt-info-dot:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.xt-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  width: max-content;
+  max-width: min(280px, 85vw);
+  padding: 0.65rem 0.8rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.45;
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.xt-tooltip-wide {
+  max-width: min(320px, 92vw);
+  font-weight: 400;
+}
+
+.xt-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 0.6rem;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #fff;
+  filter: drop-shadow(0 1px 0 #e2e8f0);
+}
+
+.xt-tooltip-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.xt-tooltip-list li {
+  margin: 0.15rem 0;
+}
+
+.xt-tooltip-body {
+  text-align: left;
+}
+
+.xt-tooltip-body p {
+  margin: 0 0 0.4rem;
+}
+
+.xt-tooltip-body p:last-child {
+  margin-bottom: 0;
+}
+
+.xt-tooltip-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.xt-tooltip-note {
+  margin-top: 0.45rem !important;
+  padding-top: 0.4rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.8125rem;
+}
+
+.xt-tooltip-muted {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.xt-info-wrap:hover .xt-tooltip,
+.xt-info-wrap:focus-within .xt-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.xt-warn-dot {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.xt-rebate-badge {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 999px;
+  min-width: 72px;
+  height: 28px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  gap: 0.25rem;
+  padding: 0 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: none;
+}
+
+.xt-rebate-badge strong {
+  display: inline;
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.xt-rebate-fed-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.65rem;
+}
+
+.xt-rebate-fed-top h4 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 8rem;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.xt-rebate-fed-top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.xt-rebate-value {
+  font-weight: 700;
+  color: #1e3a8a !important;
+}
+
+.xt-rebate-value-hero {
+  margin: 0.65rem 0 0 !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2;
+}
+
+.xt-rebate-total {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}
+
+.xt-rebate-total .xt-rebate-row-head {
+  align-items: center;
+}
+
+.xt-rebate-total h4 {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.xt-rebate-total-value {
+  margin: 0 !important;
+  color: #4c1d95 !important;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.xt-rebate-breakdown {
+  margin-top: 0.45rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.42rem;
+}
+
+.xt-rebate-breakdown span {
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.83rem;
+  line-height: 1.35;
+}
+
+.xt-rebate-breakdown .xt-rebate-break-pv {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e293b;
+}
+
+.xt-rebate-breakdown .xt-rebate-break-sv {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #1e293b;
+}
+
+.xt-calc-proposal {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: 0.875rem;
+}
+
+.xt-calc-proposal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+}
+
+.xt-calc-proposal-market span {
+  color: #64748b;
+}
+
+.xt-calc-proposal-market strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.xt-calc-proposal-discounts {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+  margin-top: 0.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.xt-calc-proposal-discount {
+  border: none;
+  padding: 0.2rem 0;
+}
+
+.xt-calc-proposal-discount span,
+.xt-calc-proposal-discount strong {
+  color: #047857;
+  font-weight: 500;
+}
+
+.xt-calc-proposal-total {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+  padding-top: 0.65rem;
+  align-items: center;
+}
+
+.xt-calc-proposal-total span {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.xt-calc-proposal-total strong {
+  color: #4c1d95;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.xt-calc-disclaimer-inline {
+  margin: 0.65rem 0 0 !important;
+  padding: 0 !important;
+  font-size: 0.75rem !important;
+  line-height: 1.45;
+  color: #64748b !important;
+}
+
+.xt-calc-table {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.72rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.xt-calc-table-head,
+.xt-calc-table-row {
+  display: grid;
+  grid-template-columns: 1.7fr 0.4fr 0.55fr 0.45fr;
+  gap: 0.45rem;
+  align-items: start;
+  padding: 0.48rem 0.58rem;
+  font-size: clamp(0.88rem, 0.72vw, 1rem);
+}
+
+.xt-calc-table-head {
+  background: #f9fafb;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: none;
+  color: #475569;
+}
+
+.xt-calc-table-row {
+  border-top: 1px solid #eef2f7;
+  color: #111827;
+}
+
+.xt-calc-table-foot {
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+  color: #64748b;
+  padding: 0.5rem 0.58rem;
+  line-height: 1.4;
+}
+
+.xt-calc-card-proposal > a.xt-btn-block {
+  margin-top: auto;
+}
+
+.xt-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1d74d9 0%, #1d74d9 35%, #e2e8f0 35%, #e2e8f0 100%);
+  outline: none;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.xt-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #1d74d9;
+  background: #fff;
+  cursor: pointer;
+}
+
+.xt-range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.xt-range::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: #1d74d9;
+}
+
+.xt-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #1d74d9;
+  background: #fff;
+  cursor: pointer;
+}
+
+.xt-reviews-section {
+  padding: 4rem 0;
+  background: linear-gradient(to right, #eff6ff, #ecfdf5);
+}
+
+.xt-reviews-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.xt-reviews-title {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.xt-reviews-sub {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #4b5563;
+}
+
+.xt-reviews-frame {
+  position: relative;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.xt-reviews-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: none;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  color: #111827;
+}
+
+.xt-reviews-prev {
+  left: 0;
+  transform: translate(-40%, -50%);
+}
+
+.xt-reviews-next {
+  right: 0;
+  transform: translate(40%, -50%);
+}
+
+@media (max-width: 640px) {
+  .xt-reviews-prev {
+    transform: translate(0, -50%);
+    left: 0.25rem;
+  }
+
+  .xt-reviews-next {
+    transform: translate(0, -50%);
+    right: 0.25rem;
+  }
+}
+
+.xt-reviews-card-wrap {
+  position: relative;
+  min-height: 280px;
+}
+
+.xt-review-card {
+  display: none;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+}
+
+.xt-review-card.is-active {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .xt-review-card {
+    padding: 2rem;
+  }
+}
+
+.xt-review-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.xt-review-quote-icon {
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(to bottom right, #3b82f6, #22c55e);
+}
+
+.xt-review-stars {
+  display: flex;
+  gap: 0.15rem;
+  margin-bottom: 1rem;
+}
+
+.xt-star {
+  color: #facc15;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.xt-review-text {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.xt-review-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.xt-review-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.xt-review-name {
+  margin: 0;
+  font-weight: 600;
+  color: #111827;
+}
+
+.xt-review-source {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.xt-reviews-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.xt-reviews-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: #d1d5db;
+  cursor: pointer;
+}
+
+.xt-reviews-dot.is-active {
+  background: #2563eb;
+  transform: scale(1.15);
+}
+
+.xt-reviews-links {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.xt-reviews-links-lead {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.xt-reviews-links-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.xt-reviews-ext {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.xt-reviews-ext:hover {
+  text-decoration: underline;
+}
+
+.xt-reviews-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}

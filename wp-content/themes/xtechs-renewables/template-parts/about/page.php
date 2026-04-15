@@ -70,6 +70,7 @@ $values = [
     ['icon' => 'zap', 'title' => 'Innovation', 'desc' => 'We embrace modern technologies and smarter ways of working to create better systems.'],
     ['icon' => 'trending-up', 'title' => 'Leadership', 'desc' => 'We set the bar for professionalism and customer care across every project stage.'],
 ];
+$team_srcset = xtechs_theme_asset_srcset('/assets/media/team.png', [640, 960, 1280]);
 ?>
 <section class="xt-about">
     <div class="xt-container xt-about-inner">
@@ -108,7 +109,7 @@ $values = [
 
             <div class="xt-about-team-card xt-reveal" data-reveal-delay="150">
                 <button class="xt-about-team-media" type="button" data-xt-about-open aria-label="Preview full team photo">
-                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/media/team.png'); ?>" alt="xTechs Renewables team of accredited installers and electricians" loading="eager" decoding="async" onerror="this.onerror=null;this.src='<?php echo esc_js(get_template_directory_uri() . '/assets/media/coming-soon-hero.jpg'); ?>';" />
+                    <img src="<?php echo esc_url(xtechs_theme_asset_url('/assets/media/team.png')); ?>" srcset="<?php echo esc_attr($team_srcset); ?>" sizes="(max-width: 1023px) 100vw, 50vw" alt="xTechs Renewables team of accredited installers and electricians" loading="eager" decoding="async" onerror="this.onerror=null;this.src='<?php echo esc_js(get_template_directory_uri() . '/assets/media/coming-soon-hero.jpg'); ?>';" />
                     <span class="xt-about-team-hint">Click to view</span>
                 </button>
                 <div class="xt-about-team-copy">
@@ -189,7 +190,7 @@ $values = [
 <div class="xt-about-modal" hidden data-xt-about-modal role="dialog" aria-modal="true" aria-label="Full team photo">
     <div class="xt-about-modal-backdrop" data-xt-about-close></div>
     <div class="xt-about-modal-inner" role="document">
-        <img class="xt-about-modal-img" src="<?php echo esc_url(get_template_directory_uri() . '/assets/media/team.png'); ?>" alt="xTechs Renewables team of accredited installers and electricians" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='<?php echo esc_js(get_template_directory_uri() . '/assets/media/coming-soon-hero.jpg'); ?>';" />
+        <img class="xt-about-modal-img" src="<?php echo esc_url(xtechs_theme_asset_url('/assets/media/team.png')); ?>" srcset="<?php echo esc_attr($team_srcset); ?>" sizes="90vw" alt="xTechs Renewables team of accredited installers and electricians" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='<?php echo esc_js(get_template_directory_uri() . '/assets/media/coming-soon-hero.jpg'); ?>';" />
         <button class="xt-about-modal-close" type="button" data-xt-about-close>Close</button>
     </div>
 </div>
