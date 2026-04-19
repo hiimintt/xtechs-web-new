@@ -164,6 +164,7 @@ $map_embed = (string) ($cfg['map_embed'] ?? '');
                                 role="tab"
                                 aria-selected="<?php echo $active ? 'true' : 'false'; ?>"
                                 id="xt-process-tab-<?php echo esc_attr($sid); ?>-<?php echo esc_attr($location_key); ?>"
+                                aria-controls="xt-loc-panel-<?php echo esc_attr($sid); ?>-<?php echo esc_attr($location_key); ?>"
                             >
                                 <span class="xt-loc-process-step-num"><?php echo (int) ($i + 1); ?></span>
                                 <span class="xt-loc-process-step-label"><?php echo esc_html((string) ($step['label'] ?? '')); ?></span>
@@ -184,10 +185,11 @@ $map_embed = (string) ($cfg['map_embed'] ?? '');
                         $total = count($steps);
                         ?>
                         <div
+                            id="xt-loc-panel-<?php echo esc_attr($sid); ?>-<?php echo esc_attr($location_key); ?>"
                             class="xt-loc-process-panel"
                             data-xt-process-panel="<?php echo esc_attr($sid); ?>"
                             role="tabpanel"
-                            <?php echo $hidden ? 'hidden' : ''; ?>
+                            <?php echo $hidden ? 'hidden aria-hidden="true"' : 'aria-hidden="false"'; ?>
                             aria-labelledby="xt-process-tab-<?php echo esc_attr($sid); ?>-<?php echo esc_attr($location_key); ?>"
                         >
                             <article class="xt-loc-process-article">

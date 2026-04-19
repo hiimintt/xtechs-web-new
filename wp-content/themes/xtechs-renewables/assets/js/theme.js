@@ -13,9 +13,12 @@
     var menuBtn = document.querySelector('.xt-menu-toggle');
     var mobileNav = document.getElementById('xt-mobile-nav');
     if (menuBtn && mobileNav) {
+      var labelOpen = menuBtn.getAttribute('data-xt-menu-label-open') || 'Open menu';
+      var labelClose = menuBtn.getAttribute('data-xt-menu-label-close') || 'Close menu';
       menuBtn.addEventListener('click', function () {
         var open = menuBtn.classList.toggle('is-open');
         menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menuBtn.setAttribute('aria-label', open ? labelClose : labelOpen);
         if (open) {
           mobileNav.removeAttribute('hidden');
         } else {

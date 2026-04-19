@@ -16,7 +16,9 @@
       btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
     panels.forEach(function (panel) {
-      panel.hidden = panel.getAttribute('data-xt-process-panel') !== id;
+      var match = panel.getAttribute('data-xt-process-panel') === id;
+      panel.hidden = !match;
+      panel.setAttribute('aria-hidden', match ? 'false' : 'true');
     });
   }
 

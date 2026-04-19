@@ -34,10 +34,10 @@ $titles = [
                 <h1 class="xt-hero-h1 xt-hero-line-deep"><?php esc_html_e('Solar panel & battery installation — Melbourne & Victoria', 'xtechs-renewables'); ?></h1>
                 <p class="xt-hero-brand xt-text-gradient-logo"><?php esc_html_e('Designed & installed by xTechs Renewables', 'xtechs-renewables'); ?></p>
 
-                <div class="xt-hero-rotate-wrap">
+                <div class="xt-hero-rotate-wrap" aria-live="polite" aria-atomic="true">
                     <div class="xt-hero-rotate-track" id="xt-hero-rotate" data-titles="<?php echo esc_attr(wp_json_encode($titles)); ?>">
                         <?php foreach ($titles as $i => $t) : ?>
-                            <p class="xt-hero-rotate-line<?php echo $i === 0 ? ' is-active' : ''; ?>"><?php echo esc_html($t); ?></p>
+                            <p class="xt-hero-rotate-line<?php echo $i === 0 ? ' is-active' : ''; ?>"<?php echo $i === 0 ? ' aria-hidden="false"' : ' aria-hidden="true"'; ?>><?php echo esc_html($t); ?></p>
                         <?php endforeach; ?>
                     </div>
                 </div>

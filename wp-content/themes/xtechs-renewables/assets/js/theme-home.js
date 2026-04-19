@@ -15,10 +15,16 @@
       var lines = track.querySelectorAll('.xt-hero-rotate-line');
       if (lines.length > 1) {
         var hi = 0;
+        lines.forEach(function (line, j) {
+          var on = line.classList.contains('is-active');
+          line.setAttribute('aria-hidden', on ? 'false' : 'true');
+        });
         window.setInterval(function () {
           lines[hi].classList.remove('is-active');
+          lines[hi].setAttribute('aria-hidden', 'true');
           hi = (hi + 1) % lines.length;
           lines[hi].classList.add('is-active');
+          lines[hi].setAttribute('aria-hidden', 'false');
         }, 2800);
       }
     }

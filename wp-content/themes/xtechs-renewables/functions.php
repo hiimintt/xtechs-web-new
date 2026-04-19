@@ -64,8 +64,15 @@ add_action('send_headers', function (): void {
 /**
  * If permalinks are still "Plain" (?page_id=), switch to Post name once (first admin visit with capability).
  * Server must support rewrites (.htaccess or nginx rules). Settings → Permalinks still allows manual override.
+ *
+ * Disabled by default: set in wp-config.php before this file loads:
+ *   define( 'XTECHS_AUTO_PRETTY_PERMALINKS', true );
+ * so production is not surprised by a rewrite break on first admin visit.
  */
 function xtechs_theme_enable_pretty_permalinks_once(): void {
+    if (!defined('XTECHS_AUTO_PRETTY_PERMALINKS') || !XTECHS_AUTO_PRETTY_PERMALINKS) {
+        return;
+    }
     if (!is_admin() || !current_user_can('manage_options')) {
         return;
     }

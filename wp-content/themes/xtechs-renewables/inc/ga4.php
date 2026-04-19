@@ -1,7 +1,15 @@
 <?php
 /**
- * Google Analytics 4 — set GA4_MEASUREMENT_ID in wp-config.php (G-XXXXXXXXXX).
- * Script enqueue: xtechs_enqueue_assets() in functions.php. Loads after cookie consent; respects Analytics toggle.
+ * Google Analytics 4
+ *
+ * Configuration: in wp-config.php (before "stop editing"):
+ *   define( 'GA4_MEASUREMENT_ID', 'G-XXXXXXXXXX' );
+ *
+ * There is no inline gtag in header.php on purpose: assets/js/ga4.js is enqueued from
+ * xtechs_enqueue_assets(), injects gtag/dataLayer after the user enables Analytics in the
+ * cookie banner, and passes the ID via wp_localize_script (xtGa4Config.measurementId).
+ *
+ * Verify: Google Tag Assistant, or GA4 Admin → Data display → DebugView (with consent on).
  *
  * Events (mark as conversions in GA4 → Admin → Events → toggle “Mark as conversion”):
  *   - generate_lead — contact message, booking handoff, partner quote (recommended GA4 event)

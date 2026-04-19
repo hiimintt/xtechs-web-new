@@ -89,6 +89,9 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+/* xTechs Renewables theme (optional) */
+// define( 'XTECHS_AUTO_PRETTY_PERMALINKS', true ); /* Only enable when the server supports URL rewrites (Apache mod_rewrite / nginx rules). Auto-switches from Plain permalinks once on admin visit. */
+// define( 'GA4_MEASUREMENT_ID', 'G-XXXXXXXXXX' ); /* Loads via theme JS after cookie consent — not inlined in header.php */
 
 
 /* That's all, stop editing! Happy publishing. */

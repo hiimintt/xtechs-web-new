@@ -79,7 +79,15 @@ $logo_url = $uri . '/assets/media/xlogo.png';
             <a class="xt-btn xt-btn-primary xt-btn-sm" href="<?php echo esc_url(home_url('/contact')); ?>"><?php esc_html_e('Request call back', 'xtechs-renewables'); ?></a>
         </div>
 
-        <button type="button" class="xt-menu-toggle" aria-expanded="false" aria-controls="xt-mobile-nav" aria-label="<?php esc_attr_e('Menu', 'xtechs-renewables'); ?>">
+        <button
+            type="button"
+            class="xt-menu-toggle"
+            aria-expanded="false"
+            aria-controls="xt-mobile-nav"
+            aria-label="<?php esc_attr_e('Open menu', 'xtechs-renewables'); ?>"
+            data-xt-menu-label-open="<?php esc_attr_e('Open menu', 'xtechs-renewables'); ?>"
+            data-xt-menu-label-close="<?php esc_attr_e('Close menu', 'xtechs-renewables'); ?>"
+        >
             <span class="xt-menu-icon xt-menu-icon-open" aria-hidden="true"><?php echo xtechs_icon_menu(); ?></span>
             <span class="xt-menu-icon xt-menu-icon-close" aria-hidden="true"><?php echo xtechs_icon_close(); ?></span>
         </button>
