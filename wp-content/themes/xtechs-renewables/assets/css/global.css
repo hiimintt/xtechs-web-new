@@ -574,7 +574,15 @@ a {
   font-size: clamp(2rem, 4.8vw, 3.6rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 0.95;
+  line-height: 1.12;
+}
+
+.xt-hero-brand {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.35rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .xt-hero-line {
@@ -885,6 +893,10 @@ a {
   justify-content: center;
   margin-bottom: 1rem;
   min-height: 0;
+}
+
+.xt-service-images picture {
+  display: contents;
 }
 
 .xt-service-img {
@@ -1215,6 +1227,64 @@ a {
 
 .xt-footer-legal-lines p {
   margin: 0.15rem 0;
+}
+
+.xt-footer-nap {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #374151;
+  font-style: normal;
+}
+
+.xt-footer-nap-name {
+  display: block;
+  font-weight: 600;
+  color: #111827;
+}
+
+.xt-footer-nap-line {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.xt-footer-nap a {
+  color: var(--brand-primary, #0d9488);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.xt-contact-nap {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.xt-contact-nap-line {
+  margin: 0.25rem 0 0;
+}
+
+.xt-contact-nap-line:first-child {
+  margin-top: 0;
+}
+
+.xt-contact-nap a {
+  color: var(--brand-primary, #0d9488);
+  font-weight: 600;
+}
+
+.xt-locations-extra {
+  margin-top: 0.75rem;
+  max-width: 44rem;
+  font-size: 1rem;
+  color: #4b5563;
+  line-height: 1.65;
 }
 
 .xt-footer-columns-wrap {

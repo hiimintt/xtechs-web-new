@@ -43,6 +43,9 @@ $locations = [
         <header class="xt-locations-head">
             <h1><?php esc_html_e('Locations We Service', 'xtechs-renewables'); ?></h1>
             <p><?php esc_html_e('xTechs Renewables supports residential and commercial projects across Victoria, with dedicated teams for major service regions.', 'xtechs-renewables'); ?></p>
+            <p class="xt-locations-extra">
+                <?php esc_html_e('We also travel regularly to high-growth corridors including Frankston, Knox and Boronia, Greater Dandenong, Wyndham and Werribee, Melton, Ballarat, and Sunbury. Request a site visit to confirm timing for your suburb.', 'xtechs-renewables'); ?>
+            </p>
         </header>
 
         <div class="xt-locations-grid">

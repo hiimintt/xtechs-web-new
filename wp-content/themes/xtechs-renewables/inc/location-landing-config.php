@@ -95,6 +95,12 @@ function xtechs_location_landing_config(string $key): ?array
                     'area' => 'Melbourne CBD',
                     'opening' => 'Mo-Fr 08:00-17:00',
                 ],
+                'local_seo_heading' => 'Solar & battery installation for Melbourne CBD apartments & rooftops',
+                'local_seo_paragraphs' => [
+                    'Melbourne CBD properties face tight roof space, shading from neighbouring towers, and strict body corporate approvals. We model yield with realistic orientation data, recommend inverter and battery locations that respect fire egress and switchboard capacity, and prepare documentation owners corporations can review quickly.',
+                    'Export limits and DNSP requirements change by connection point; we coordinate applications, metering upgrades, and compliance paperwork so your system is commissioned safely. Where carpark or basement electrical rooms are involved, we plan cable routes and isolation points with minimal disruption to residents.',
+                    'Whether you need compact high‑yield PV, blackout‑ready battery backup for essentials, or workplace and visitor EV charging, xTechs Renewables delivers CEC‑accredited workmanship and clear handover packs—backed by monitoring setup and optional support plans suited to CBD buildings.',
+                ],
             ];
             break;
 
@@ -137,6 +143,12 @@ function xtechs_location_landing_config(string $key): ?array
                     'geo' => ['lat' => -36.757, 'lng' => 144.279],
                     'area' => 'Bendigo',
                     'opening' => 'Mo-Fr 08:00-17:00',
+                ],
+                'local_seo_heading' => 'Bendigo solar, battery storage & EV charger installs',
+                'local_seo_paragraphs' => [
+                    'Bendigo homes and businesses benefit from predictable roof layouts and strong daylight hours—ideal for right‑sized PV arrays paired with batteries when you want overnight savings or backup for essential circuits. We focus on tidy cable runs, compliant switchboard work, and hardware selections that match your budget and warranty expectations.',
+                    'Regional connections still require careful DNSP coordination: export limits, phase balance, and metering upgrades can affect how much solar you can push to the grid. Our team prepares the technical submissions and commissioning checks so your system performs as modelled once energised.',
+                    'From new estates and acreage properties to light commercial sheds and retail, xTechs Renewables brings Victorian installation standards, transparent quotes after site assessment, and optional monitoring so you can track production and consumption year‑round across Bendigo and nearby towns.',
                 ],
             ];
             break;
@@ -189,6 +201,12 @@ function xtechs_location_landing_config(string $key): ?array
                     'area' => 'Geelong',
                     'opening' => 'Mo-Fr 08:00-17:00',
                 ],
+                'local_seo_heading' => 'Geelong solar power, batteries & coastal‑ready electrical',
+                'local_seo_paragraphs' => [
+                    'Geelong’s mix of established suburbs, new builds, and industrial pockets means every roofline is different. We combine aerial imagery with on‑site verification to place arrays where they capture the most yield, while keeping bird‑proofing, rail schedules, and wind loads appropriate for exposure near the bay.',
+                    'Battery storage is increasingly popular for homeowners who want protection from outages and arbitrage against evening tariffs. We size backup circuits realistically—lights, fridge, comms, and selected hard‑wired loads—and explain warranty terms clearly before you commit to a specific brand.',
+                    'Workplace EV charging is growing fast in Geelong corridors; we integrate chargers with existing supply capacity, consult on load management, and document everything for OHS and electrical inspection. xTechs Renewables supports residential, builder, and commercial programmes across the region.',
+                ],
             ];
             break;
 
@@ -231,6 +249,12 @@ function xtechs_location_landing_config(string $key): ?array
                     'geo' => ['lat' => -38.34, 'lng' => 145.0],
                     'area' => 'Mornington Peninsula',
                     'opening' => 'Mo-Fr 08:00-17:00',
+                ],
+                'local_seo_heading' => 'Mornington Peninsula solar — coastal durability & backup power',
+                'local_seo_paragraphs' => [
+                    'Salt air, higher humidity, and seasonal storms mean hardware selection matters on the Peninsula. We specify corrosion‑resistant racking and fasteners where needed, document waterproof penetrations, and keep electrical enclosures rated for the environment so warranties remain valid.',
+                    'Holiday homes and coastal rentals often need monitoring at a glance: we configure apps and alerts so owners off‑site can see production, battery state of charge, and faults. For backup systems, we walk through which circuits stay energised during grid loss and how long batteries can sustain them.',
+                    'EV adoption along the bay continues to climb—garage wall chargers, shared visitor bays, and three‑phase supplies for larger homes all require careful cable sizing and switchboard review. xTechs Renewables delivers Peninsula‑specific designs with CEC‑accredited installers and documentation ready for insurers or strata.',
                 ],
             ];
             break;
@@ -280,6 +304,12 @@ function xtechs_location_landing_config(string $key): ?array
                         'closes' => '17:00',
                     ],
                 ],
+                'local_seo_heading' => 'South‑East Melbourne solar installers — homes, units & workshops',
+                'local_seo_paragraphs' => [
+                    'The South‑East corridor blends compact housing, established trees, and growing commercial strips—each site needs a bespoke shading study and roof safety plan. We advise on panel layouts that respect tiles and metal decks, add critter guard where possums are active, and sequence installs to reduce time on roof.',
+                    'Three‑phase homes and workshops often want larger inverters or hybrid systems; we confirm mains capacity, future EV loads, and whether a battery can island essentials during outages. Where DNSP export limits apply, we configure inverter controls and customer export profiles to stay compliant.',
+                    'Builder partnerships are common here: we align with slab‑to‑handover timelines, provide documentation for volume home brands, and leave labelled switchboards that maintenance teams understand. xTechs Renewables supports households and businesses from Rowville through Berwick with transparent staging from quote to commissioning.',
+                ],
             ];
             break;
 
@@ -287,7 +317,22 @@ function xtechs_location_landing_config(string $key): ?array
             return null;
     }
 
-    $cfg['map_embed'] = $map_embed;
+    if (!isset($cfg['map_embed']) || $cfg['map_embed'] === '') {
+        $j = isset($cfg['json']) && is_array($cfg['json']) ? $cfg['json'] : [];
+        $geo = isset($j['geo']) && is_array($j['geo']) ? $j['geo'] : null;
+        if (is_array($geo) && isset($geo['lat'], $geo['lng'])) {
+            $z = ((string) ($cfg['slug'] ?? '')) === 'melbourne-cbd' ? 13 : 11;
+            $cfg['map_embed'] = sprintf(
+                'https://maps.google.com/maps?q=%s,%s&hl=en&z=%d&output=embed',
+                rawurlencode((string) $geo['lat']),
+                rawurlencode((string) $geo['lng']),
+                $z
+            );
+        } else {
+            $cfg['map_embed'] = $map_embed;
+        }
+    }
+
     $cfg['hero_url'] = xtechs_location_resolve_hero(
         (string) $cfg['hero_dir'],
         (string) $cfg['hero_file'],

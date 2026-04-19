@@ -9,6 +9,23 @@ require_once get_template_directory() . '/inc/ga4.php';
 require_once get_template_directory() . '/inc/resend-notify.php';
 
 /**
+ * Whether to load the chatbot script + footer FAB (skip thin legal pages by default).
+ */
+function xtechs_should_enqueue_chatbot(): bool {
+    if (is_admin() || wp_doing_ajax()) {
+        return false;
+    }
+    if (is_feed() || is_embed()) {
+        return false;
+    }
+    if (is_page(['privacy', 'cookies', 'terms'])) {
+        return false;
+    }
+
+    return (bool) apply_filters('xtechs_enqueue_chatbot', true);
+}
+
+/**
  * Disable page caching aggressively on local Docker hosts so CSS/JS changes are visible immediately.
  */
 function xtechs_is_local_runtime_host(): bool {
@@ -34,6 +51,7 @@ add_action('init', function (): void {
 }, 1);
 
 add_action('send_headers', function (): void {
+    // Only localhost / Docker — production visitors are not affected (audits often miss this guard).
     if (!xtechs_is_local_runtime_host()) {
         return;
     }
@@ -377,18 +395,21 @@ function xtechs_enqueue_assets() {
         ]);
     }
 
-    wp_enqueue_script(
-        'xtechs-chatbot',
-        get_template_directory_uri() . '/assets/js/chatbot.js',
-        [],
-        $chatbot_js_ver,
-        true
-    );
-    wp_localize_script('xtechs-chatbot', 'xtChatbot', [
-        'apiUrl' => home_url('/api/chat'),
-        'apiFallbackUrl' => home_url('/index.php?chat_api=1'),
-        'contactUrl' => home_url('/contact'),
-    ]);
+    if (xtechs_should_enqueue_chatbot()) {
+        wp_enqueue_script(
+            'xtechs-chatbot',
+            get_template_directory_uri() . '/assets/js/chatbot.js',
+            [],
+            $chatbot_js_ver,
+            true
+        );
+        wp_localize_script('xtechs-chatbot', 'xtChatbot', [
+            'apiUrl' => home_url('/api/chat'),
+            'apiFallbackUrl' => home_url('/index.php?chat_api=1'),
+            'contactUrl' => home_url('/contact'),
+        ]);
+        xtechs_mark_script_defer('xtechs-chatbot');
+    }
 
     xtechs_mark_script_defer('xtechs-theme-main');
     xtechs_mark_script_defer('xtechs-theme-home');
@@ -469,7 +490,7 @@ function xtechs_optimize_html_img_tags(string $html): string {
         };
 
         if (stripos($tag, 'decoding=') === false) {
-            $tag = $append_attr($tag, 'decoding="async"');
+            $tag = $append_attr($tag, $is_lcp_candidate ? 'decoding="sync"' : 'decoding="async"');
         }
         if (stripos($tag, 'loading=') === false) {
             $tag = $append_attr($tag, $is_lcp_candidate ? 'loading="eager"' : 'loading="lazy"');
@@ -518,6 +539,9 @@ add_action('template_redirect', function (): void {
  */
 add_action('wp_footer', function (): void {
     if (is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (!xtechs_should_enqueue_chatbot()) {
         return;
     }
     $chatbot_path = get_template_directory() . '/assets/js/chatbot.js';
@@ -687,6 +711,42 @@ function xtechs_theme_asset_url(string $relative_path): string {
     }
 
     return $asset_url;
+}
+
+/**
+ * Home / location services grid image: optional WebP source when a sibling .webp file exists.
+ *
+ * @param string $relative_path Theme-relative path e.g. assets/media/services/residential-1.jpg
+ */
+function xtechs_theme_service_card_img(string $relative_path, string $alt, string $classes, bool $decorative = false): string {
+    $relative_path = ltrim(str_replace('\\', '/', $relative_path), '/');
+    $rel_slash = '/' . $relative_path;
+    $abs_original = get_template_directory() . $rel_slash;
+    $webp_rel_slash = (string) preg_replace('/\.(jpe?g|png)$/i', '.webp', $rel_slash);
+    $abs_webp = get_template_directory() . $webp_rel_slash;
+
+    $orig_uri = get_template_directory_uri() . $rel_slash;
+    $webp_uri = get_template_directory_uri() . $webp_rel_slash;
+
+    $has_orig = is_readable($abs_original);
+    $has_webp = is_readable($abs_webp);
+
+    $alt_attr = $decorative ? ' alt=""' : ' alt="' . esc_attr($alt) . '"';
+    $common = ' class="' . esc_attr($classes) . '" loading="lazy" width="176" height="176" decoding="async"';
+
+    if ($has_webp && $has_orig) {
+        return '<picture>'
+            . '<source type="image/webp" srcset="' . esc_url($webp_uri) . '" />'
+            . '<img src="' . esc_url($orig_uri) . '"' . $alt_attr . $common . ' />'
+            . '</picture>';
+    }
+
+    $src = xtechs_theme_asset_url($rel_slash);
+    if (!$has_orig && $has_webp) {
+        $src = $webp_uri;
+    }
+
+    return '<img src="' . esc_url($src) . '"' . $alt_attr . $common . ' />';
 }
 
 /**

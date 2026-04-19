@@ -36,6 +36,17 @@ $chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_direc
                 <p><?php esc_html_e('ACN: 673 983 572', 'xtechs-renewables'); ?></p>
                 <p><?php esc_html_e('REC: 36065', 'xtechs-renewables'); ?></p>
             </div>
+            <?php if (defined('XTECHS_ORG_STREET') && function_exists('xtechs_seo_google_business_profile_url')) : ?>
+                <address class="xt-footer-nap">
+                    <span class="xt-footer-nap-name"><?php echo esc_html((string) XTECHS_ORG_LEGAL_NAME); ?></span>
+                    <span class="xt-footer-nap-line"><?php echo esc_html((string) XTECHS_ORG_STREET); ?>, <?php echo esc_html((string) XTECHS_ORG_LOCALITY); ?> <?php echo esc_html((string) XTECHS_ORG_REGION); ?> <?php echo esc_html((string) XTECHS_ORG_POSTAL); ?></span>
+                    <span class="xt-footer-nap-line">
+                        <a href="tel:1300983247"><?php esc_html_e('1300 983 247', 'xtechs-renewables'); ?></a>
+                        <span class="xt-footer-nap-sep" aria-hidden="true"> · </span>
+                        <a href="<?php echo esc_url(xtechs_seo_google_business_profile_url()); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Maps / reviews', 'xtechs-renewables'); ?></a>
+                    </span>
+                </address>
+            <?php endif; ?>
         </div>
 
         <div class="xt-footer-columns-wrap">
@@ -165,6 +176,7 @@ $chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_direc
         </div>
     </div>
 </div>
+<?php if (function_exists('xtechs_should_enqueue_chatbot') && xtechs_should_enqueue_chatbot()) : ?>
 <button
     type="button"
     id="xt-chatbot-fallback-fab"
@@ -174,6 +186,7 @@ $chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_direc
 >
     <span aria-hidden="true">💬</span>
 </button>
+<?php endif; ?>
 <?php wp_footer(); ?>
 </body>
 </html>

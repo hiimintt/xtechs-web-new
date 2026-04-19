@@ -44,7 +44,14 @@ $map_embed = (string) ($cfg['map_embed'] ?? '');
                 <div class="xt-loc-hero-bg__ring xt-loc-hero-bg__ring--b"></div>
                 <div class="xt-loc-hero-bg__ring xt-loc-hero-bg__ring--c"></div>
                 <div class="xt-loc-hero-bg__logo">
-                    <img src="<?php echo esc_url($logo_url); ?>" alt="" width="320" height="320" decoding="async" fetchpriority="high" loading="eager" />
+                    <?php
+                    $loc_logo_alt = sprintf(
+                        /* translators: %s: region name (e.g. Melbourne CBD) */
+                        __('xTechs Renewables — solar & battery installers (%s)', 'xtechs-renewables'),
+                        (string) ($cfg['badge'] ?? 'Victoria')
+                    );
+                    ?>
+                    <img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr($loc_logo_alt); ?>" width="320" height="320" decoding="async" fetchpriority="high" loading="eager" />
                 </div>
             </div>
         </div>
@@ -81,6 +88,30 @@ $map_embed = (string) ($cfg['map_embed'] ?? '');
             </div>
         </div>
     </section>
+
+    <?php
+    $seo_paras = isset($cfg['local_seo_paragraphs']) && is_array($cfg['local_seo_paragraphs']) ? $cfg['local_seo_paragraphs'] : [];
+    ?>
+    <?php if ($seo_paras !== []) : ?>
+    <section class="xt-loc-section xt-loc-section--white xt-loc-seo-intro" aria-labelledby="xt-loc-seo-intro-title-<?php echo esc_attr($location_key); ?>">
+        <div class="xt-loc-section-inner xt-loc-prose">
+            <?php
+            $seo_intro_h2 = isset($cfg['local_seo_heading']) ? trim((string) $cfg['local_seo_heading']) : '';
+            if ($seo_intro_h2 === '') {
+                $seo_intro_h2 = sprintf(
+                    /* translators: %s: region label */
+                    __('Solar, battery & electrical projects in %s', 'xtechs-renewables'),
+                    (string) ($cfg['badge'] ?? '')
+                );
+            }
+            ?>
+            <h2 id="xt-loc-seo-intro-title-<?php echo esc_attr($location_key); ?>" class="xt-loc-seo-intro-title"><?php echo esc_html($seo_intro_h2); ?></h2>
+            <?php foreach ($seo_paras as $para) : ?>
+                <p><?php echo esc_html((string) $para); ?></p>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <section id="services-tile" class="xt-loc-section xt-loc-section--white xt-loc-services-wrap">
         <div class="xt-loc-section-inner">
@@ -240,5 +271,36 @@ $map_embed = (string) ($cfg['map_embed'] ?? '');
         </div>
     </section>
 
-    <script type="application/ld+json"><?php echo wp_json_encode($json_ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?></script>
+    <?php
+    if (is_array($faq) && !empty($faq['items'])) {
+        $faq_entities = [];
+        foreach ((array) $faq['items'] as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $q = trim((string) ($item['q'] ?? ''));
+            $a = trim((string) ($item['a'] ?? ''));
+            if ($q === '' || $a === '') {
+                continue;
+            }
+            $faq_entities[] = [
+                '@type' => 'Question',
+                'name' => $q,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => $a,
+                ],
+            ];
+        }
+        if ($faq_entities !== []) {
+            $faq_ld = [
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => $faq_entities,
+            ];
+            echo '<script type="application/ld+json" id="xtechs-loc-faq">' . wp_json_encode($faq_ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+        }
+    }
+    ?>
+    <script type="application/ld+json" id="xtechs-loc-localbusiness"><?php echo wp_json_encode($json_ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?></script>
 </div>

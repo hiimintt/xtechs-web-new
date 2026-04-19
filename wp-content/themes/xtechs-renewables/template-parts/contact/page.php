@@ -22,6 +22,17 @@ while (count($dates) < 24) {
                 Ready to start your clean energy journey? Book a site assessment for a detailed quote,
                 or contact us for a consultation. We're here to help you make the switch to renewable energy.
             </p>
+            <?php if (defined('XTECHS_ORG_STREET') && function_exists('xtechs_seo_google_business_profile_url')) : ?>
+                <aside class="xt-contact-nap" aria-label="<?php esc_attr_e('Business address and phone', 'xtechs-renewables'); ?>">
+                    <p class="xt-contact-nap-line"><strong><?php echo esc_html((string) XTECHS_ORG_LEGAL_NAME); ?></strong></p>
+                    <p class="xt-contact-nap-line"><?php echo esc_html((string) XTECHS_ORG_STREET); ?>, <?php echo esc_html((string) XTECHS_ORG_LOCALITY); ?> <?php echo esc_html((string) XTECHS_ORG_REGION); ?> <?php echo esc_html((string) XTECHS_ORG_POSTAL); ?></p>
+                    <p class="xt-contact-nap-line">
+                        <a href="tel:1300983247"><?php esc_html_e('1300 983 247', 'xtechs-renewables'); ?></a>
+                        <span class="xt-contact-nap-sep" aria-hidden="true"> · </span>
+                        <a href="<?php echo esc_url(xtechs_seo_google_business_profile_url()); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Maps listing', 'xtechs-renewables'); ?></a>
+                    </p>
+                </aside>
+            <?php endif; ?>
         </header>
 
         <form class="xt-contact-unified" action="#" method="post" novalidate data-xt-unified-form>

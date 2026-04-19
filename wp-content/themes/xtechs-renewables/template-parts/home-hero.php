@@ -20,7 +20,7 @@ $titles = [
                 <span class="xt-ring xt-ring-b"></span>
                 <span class="xt-ring xt-ring-c"></span>
                 <span class="xt-bg-logo-wrap">
-                    <img src="<?php echo esc_url($logo); ?>" alt="" class="xt-bg-logo" width="320" height="320" decoding="async" fetchpriority="high" />
+                    <img src="<?php echo esc_url($logo); ?>" alt="<?php esc_attr_e('xTechs Renewables — solar and battery installer, Victoria', 'xtechs-renewables'); ?>" class="xt-bg-logo" width="320" height="320" decoding="sync" fetchpriority="high" />
                 </span>
             </div>
             <span class="xt-bg-blob xt-bg-blob-tl"></span>
@@ -31,10 +31,8 @@ $titles = [
     <div class="xt-hero-front">
         <div class="xt-container xt-hero-inner">
             <div class="xt-hero-copy">
-                <h1 class="xt-hero-h1">
-                    <span class="xt-hero-line xt-hero-line-deep"><?php esc_html_e('Solar & battery for Victoria', 'xtechs-renewables'); ?></span>
-                    <span class="xt-hero-line xt-text-gradient-logo"><?php esc_html_e('Designed & installed by xTechs', 'xtechs-renewables'); ?></span>
-                </h1>
+                <h1 class="xt-hero-h1 xt-hero-line-deep"><?php esc_html_e('Solar panel & battery installation — Melbourne & Victoria', 'xtechs-renewables'); ?></h1>
+                <p class="xt-hero-brand xt-text-gradient-logo"><?php esc_html_e('Designed & installed by xTechs Renewables', 'xtechs-renewables'); ?></p>
 
                 <div class="xt-hero-rotate-wrap">
                     <div class="xt-hero-rotate-track" id="xt-hero-rotate" data-titles="<?php echo esc_attr(wp_json_encode($titles)); ?>">
@@ -45,7 +43,7 @@ $titles = [
                 </div>
 
                 <p class="xt-hero-lead">
-                    <?php esc_html_e('Solar panel installation Melbourne and solar battery storage across Victoria — plus EV chargers and off-grid options. xTechs Renewables designs and installs compliant PV and battery systems for homes, builders, and businesses.', 'xtechs-renewables'); ?>
+                    <?php esc_html_e('Clean energy systems, smart storage, and reliable electrical — for homes, builders, and businesses across Victoria. Solar panel installation Melbourne and solar battery storage — plus EV chargers and off-grid options. xTechs Renewables designs and installs compliant PV and battery systems with neat workmanship and clear documentation.', 'xtechs-renewables'); ?>
                 </p>
 
                 <div class="xt-hero-cta-row">

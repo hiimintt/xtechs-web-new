@@ -11,6 +11,7 @@ if (!defined('ABSPATH')) {
  * Optional wp-config.php overrides:
  *   define('XTECHS_GOOGLE_SITE_VERIFICATION', 'your-token');
  *   define('XTECHS_PUBLIC_SITE_URL', 'https://www.xtechsrenewables.com.au'); // force canonical base if WP URL differs
+ *   define('XTECHS_GOOGLE_BUSINESS_PROFILE_URL', 'https://g.page/your-listing'); // GBP / Maps listing (reviews, consistency)
  */
 if (!defined('XTECHS_ORG_LEGAL_NAME')) {
     define('XTECHS_ORG_LEGAL_NAME', 'xTechs Renewables');
@@ -38,6 +39,64 @@ if (!defined('XTECHS_ORG_PHONE_E164')) {
 }
 if (!defined('XTECHS_ORG_EMAIL')) {
     define('XTECHS_ORG_EMAIL', 'inquiries@xtechsrenewables.com.au');
+}
+if (!defined('XTECHS_ORG_REC_NUMBER')) {
+    define('XTECHS_ORG_REC_NUMBER', '36065');
+}
+if (!defined('XTECHS_GOOGLE_BUSINESS_PROFILE_URL')) {
+    define('XTECHS_GOOGLE_BUSINESS_PROFILE_URL', '');
+}
+
+/**
+ * Maps / Google Business Profile URL for footer + NAP (falls back to a Maps search for NAP consistency).
+ */
+function xtechs_seo_google_business_profile_url(): string {
+    $configured = defined('XTECHS_GOOGLE_BUSINESS_PROFILE_URL') ? (string) XTECHS_GOOGLE_BUSINESS_PROFILE_URL : '';
+    $configured = trim($configured);
+    if ($configured !== '') {
+        return esc_url_raw($configured);
+    }
+    $query = sprintf(
+        '%s %s %s %s %s Australia',
+        XTECHS_ORG_LEGAL_NAME,
+        XTECHS_ORG_STREET,
+        XTECHS_ORG_LOCALITY,
+        XTECHS_ORG_REGION,
+        XTECHS_ORG_POSTAL
+    );
+
+    return 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query);
+}
+
+/**
+ * Named cities / regions for LocalBusiness areaServed (Victoria solar corridors).
+ *
+ * @return list<array<string, mixed>>
+ */
+function xtechs_seo_named_area_served_nodes(): array {
+    $places = [
+        'Melbourne',
+        'Greater Melbourne',
+        'Frankston',
+        'Knox',
+        'Dandenong',
+        'Wyndham',
+        'Werribee',
+        'Melton',
+        'Ballarat',
+        'Sunbury',
+        'Geelong',
+        'Bendigo',
+        'Mornington Peninsula',
+        'Rowville',
+    ];
+    $out = [];
+    foreach ($places as $name) {
+        $out[] = ['@type' => 'City', 'name' => $name];
+    }
+    $out[] = ['@type' => 'AdministrativeArea', 'name' => 'Victoria, Australia'];
+
+    return $out;
 }
 
 /**
@@ -299,8 +358,18 @@ function xtechs_seo_schema_logo_object(array $urls): array {
  * @return array<string, mixed>
  */
 function xtechs_seo_schema_local_business(array $urls): array {
+    $geo_circle = [
+        '@type' => 'GeoCircle',
+        'geoMidpoint' => [
+            '@type' => 'GeoCoordinates',
+            'latitude' => (string) XTECHS_ORG_LAT,
+            'longitude' => (string) XTECHS_ORG_LNG,
+        ],
+        'geoRadius' => 150000,
+    ];
+
     return [
-        '@type' => 'LocalBusiness',
+        '@type' => ['LocalBusiness', 'HomeAndConstructionBusiness', 'ElectricalContractor'],
         '@id' => $urls['base'] . '/#localbusiness',
         'name' => XTECHS_ORG_LEGAL_NAME,
         'parentOrganization' => ['@id' => $urls['base'] . '/#organization'],
@@ -308,6 +377,8 @@ function xtechs_seo_schema_local_business(array $urls): array {
         'image' => $urls['image'],
         'description' => xtechs_seo_default_description(),
         'sameAs' => xtechs_seo_schema_same_as(),
+        'hasMap' => xtechs_seo_google_business_profile_url(),
+        'telephone' => XTECHS_ORG_PHONE_E164,
         'address' => [
             '@type' => 'PostalAddress',
             'streetAddress' => XTECHS_ORG_STREET,
@@ -332,15 +403,31 @@ function xtechs_seo_schema_local_business(array $urls): array {
             ],
         ],
         'openingHours' => 'Mo-Fr 08:00-17:00',
-        'priceRange' => '$$',
-        'serviceArea' => [
-            '@type' => 'GeoCircle',
-            'geoMidpoint' => [
-                '@type' => 'GeoCoordinates',
-                'latitude' => (string) XTECHS_ORG_LAT,
-                'longitude' => (string) XTECHS_ORG_LNG,
+        'openingHoursSpecification' => [
+            [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                'opens' => '08:00',
+                'closes' => '17:00',
             ],
-            'geoRadius' => 100000,
+        ],
+        'priceRange' => '$$',
+        'areaServed' => array_merge([$geo_circle], xtechs_seo_named_area_served_nodes()),
+        'hasCredential' => [
+            [
+                '@type' => 'EducationalOccupationalCredential',
+                'name' => __('CEC installer accreditation (REC)', 'xtechs-renewables'),
+                'credentialCategory' => 'license',
+                'recognizedBy' => [
+                    '@type' => 'Organization',
+                    'name' => 'Clean Energy Council',
+                ],
+                'identifier' => [
+                    '@type' => 'PropertyValue',
+                    'propertyID' => 'REC',
+                    'value' => XTECHS_ORG_REC_NUMBER,
+                ],
+            ],
         ],
         'hasOfferCatalog' => [
             '@type' => 'OfferCatalog',
