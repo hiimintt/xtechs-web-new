@@ -132,6 +132,22 @@
     var postcodeErrEl = document.getElementById('xt-calc-postcode-err');
     var panelsMiniEl = document.getElementById('xt-calc-panels-mini');
 
+    var paintRangeFill = function (inputEl) {
+      if (!inputEl) {
+        return;
+      }
+      var min = parseFloat(inputEl.min || '0');
+      var max = parseFloat(inputEl.max || '100');
+      var value = parseFloat(inputEl.value || String(min));
+      if (!isFinite(min) || !isFinite(max) || max <= min) {
+        inputEl.style.setProperty('--xt-range-pct', '0%');
+        return;
+      }
+      var pct = ((value - min) / (max - min)) * 100;
+      pct = clamp(pct, 0, 100);
+      inputEl.style.setProperty('--xt-range-pct', pct.toFixed(2) + '%');
+    };
+
     var fmtCurrency = function (val) {
       return new Intl.NumberFormat('en-AU', {
         style: 'currency',
@@ -191,6 +207,7 @@
 
       if (systemLabelEl) systemLabelEl.textContent = systemKw.toFixed(1) + ' kW';
       if (batteryLabelEl) batteryLabelEl.textContent = Math.round(batteryKwh) + ' kWh';
+      paintRangeFill(systemInput);
       if (zoneLabelEl) zoneLabelEl.textContent = isValidVic ? String(zone) : '-';
       if (zoneRowEl && postcodeErrEl) {
         if (postcode.length < 4) {

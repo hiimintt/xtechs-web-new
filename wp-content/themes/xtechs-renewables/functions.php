@@ -158,8 +158,9 @@ function xtechs_enqueue_assets() {
     $contact_css_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($active_contact_css_path) ? (string) filemtime($active_contact_css_path) : XTECHS_THEME_VERSION);
-    $active_home_interactive_css_path = file_exists($home_interactive_css_min_path) ? $home_interactive_css_min_path : $home_interactive_css_path;
-    $active_home_interactive_css_uri = file_exists($home_interactive_css_min_path)
+    $use_home_interactive_min = !$disable_asset_cache && file_exists($home_interactive_css_min_path);
+    $active_home_interactive_css_path = $use_home_interactive_min ? $home_interactive_css_min_path : $home_interactive_css_path;
+    $active_home_interactive_css_uri = $use_home_interactive_min
         ? get_template_directory_uri() . '/assets/css/home-interactive.min.css'
         : get_template_directory_uri() . '/assets/css/home-interactive.css';
     $home_interactive_css_ver = $disable_asset_cache
@@ -181,8 +182,9 @@ function xtechs_enqueue_assets() {
     $theme_js_ver = $disable_asset_cache
         ? $runtime_ver
         : (file_exists($active_theme_js_path) ? (string) filemtime($active_theme_js_path) : XTECHS_THEME_VERSION);
-    $active_theme_home_js_path = file_exists($theme_home_js_min_path) ? $theme_home_js_min_path : $theme_home_js_path;
-    $active_theme_home_js_uri = file_exists($theme_home_js_min_path)
+    $use_theme_home_min = !$disable_asset_cache && file_exists($theme_home_js_min_path);
+    $active_theme_home_js_path = $use_theme_home_min ? $theme_home_js_min_path : $theme_home_js_path;
+    $active_theme_home_js_uri = $use_theme_home_min
         ? get_template_directory_uri() . '/assets/js/theme-home.min.js'
         : get_template_directory_uri() . '/assets/js/theme-home.js';
     $theme_home_js_ver = $disable_asset_cache
