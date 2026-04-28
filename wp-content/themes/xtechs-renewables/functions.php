@@ -1703,6 +1703,40 @@ add_action('template_redirect', function (): void {
 });
 
 /**
+ * Emergency cleanup: remove accidental critical-error text from page editors.
+ */
+function xtechs_cleanup_broken_page_content_once(): void {
+    if (!is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (get_option('xtechs_broken_editor_cleanup_done') === '1') {
+        return;
+    }
+
+    $pages = get_posts([
+        'post_type' => 'page',
+        'post_status' => 'any',
+        'numberposts' => -1,
+    ]);
+    foreach ($pages as $page) {
+        if (!$page instanceof WP_Post) {
+            continue;
+        }
+        $content = (string) $page->post_content;
+        if (stripos($content, 'There has been a critical error on this website') === false) {
+            continue;
+        }
+        wp_update_post([
+            'ID' => $page->ID,
+            'post_content' => '',
+        ]);
+    }
+
+    update_option('xtechs_broken_editor_cleanup_done', '1', false);
+}
+add_action('admin_init', 'xtechs_cleanup_broken_page_content_once', 20);
+
+/**
  * Slugs backed by hardcoded page templates (page-*.php) in this theme.
  *
  * @return list<string>
@@ -1736,105 +1770,57 @@ function xtechs_hardcoded_page_slugs(): array {
     return $slugs;
 }
 
-function xtechs_is_hardcoded_page_slug(string $slug): bool {
-    return in_array($slug, xtechs_hardcoded_page_slugs(), true);
-}
-
 /**
- * Pull rendered frontend HTML for a page and extract main content for Yoast analysis.
+ * Enqueue Yoast helper for hardcoded pages so analysis uses frontend-rendered content.
+ * This is read-only and does not write to post_content.
  */
-function xtechs_rendered_page_markup_for_yoast(WP_Post $page): string {
-    $url = get_permalink($page);
-    if (!is_string($url) || $url === '') {
-        return '';
+function xtechs_enqueue_yoast_hardcoded_pages_analysis_script(): void {
+    if (!function_exists('get_current_screen')) {
+        return;
+    }
+    $screen = get_current_screen();
+    if (!$screen || $screen->post_type !== 'page') {
+        return;
     }
 
-    $res = wp_remote_get($url, [
-        'timeout' => 8,
-        'redirection' => 3,
-        'headers' => [
-            'User-Agent' => 'xTechs-Yoast-Sync/1.0',
-        ],
+    $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
+    if ($post_id <= 0) {
+        return;
+    }
+
+    $post = get_post($post_id);
+    if (!$post instanceof WP_Post || $post->post_type !== 'page') {
+        return;
+    }
+    if (!in_array((string) $post->post_name, xtechs_hardcoded_page_slugs(), true)) {
+        return;
+    }
+
+    $permalink = get_permalink($post);
+    if (!is_string($permalink) || $permalink === '') {
+        return;
+    }
+
+    $script_path = get_template_directory() . '/assets/js/yoast-hardcoded-analysis.js';
+    if (!file_exists($script_path)) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'xtechs-yoast-hardcoded-analysis',
+        get_template_directory_uri() . '/assets/js/yoast-hardcoded-analysis.js',
+        [],
+        (string) filemtime($script_path),
+        true
+    );
+
+    wp_localize_script('xtechs-yoast-hardcoded-analysis', 'xtYoastHardcodedAnalysis', [
+        'url' => $permalink,
+        'slug' => (string) $post->post_name,
     ]);
-    if (is_wp_error($res)) {
-        return '';
-    }
-
-    $html = (string) wp_remote_retrieve_body($res);
-    if ($html === '') {
-        return '';
-    }
-
-    if (preg_match('/<main\b[^>]*>(.*?)<\/main>/is', $html, $m)) {
-        $html = (string) $m[1];
-    }
-
-    $html = (string) preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $html);
-    $html = (string) preg_replace('/<style\b[^>]*>.*?<\/style>/is', '', $html);
-    $html = (string) preg_replace('/<noscript\b[^>]*>.*?<\/noscript>/is', '', $html);
-    $html = trim((string) wp_kses_post($html));
-
-    return $html;
 }
-
-function xtechs_sync_one_hardcoded_page_for_yoast(WP_Post $page): void {
-    if ($page->post_type !== 'page' || !xtechs_is_hardcoded_page_slug((string) $page->post_name)) {
-        return;
-    }
-
-    $markup = xtechs_rendered_page_markup_for_yoast($page);
-    if ($markup === '') {
-        return;
-    }
-
-    $hash = md5($markup);
-    $saved_hash = (string) get_post_meta($page->ID, '_xtechs_yoast_sync_hash', true);
-    if ($saved_hash === $hash && trim((string) $page->post_content) !== '') {
-        return;
-    }
-
-    remove_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20);
-    wp_update_post([
-        'ID' => $page->ID,
-        'post_content' => $markup,
-    ]);
-    add_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20, 3);
-
-    update_post_meta($page->ID, '_xtechs_yoast_sync_hash', $hash);
-}
-
-function xtechs_sync_hardcoded_page_for_yoast_on_save(int $post_id, WP_Post $post, bool $update): void {
-    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
-        return;
-    }
-    if ($post->post_type !== 'page' || !xtechs_is_hardcoded_page_slug((string) $post->post_name)) {
-        return;
-    }
-    xtechs_sync_one_hardcoded_page_for_yoast($post);
-}
-add_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20, 3);
-
-/**
- * One-time bootstrap sync for all hardcoded pages (so Yoast can analyze without editor edits).
- */
-function xtechs_sync_all_hardcoded_pages_for_yoast_bootstrap(): void {
-    if (!is_admin() || wp_doing_ajax()) {
-        return;
-    }
-    if (get_option('xtechs_yoast_sync_bootstrap_done') === '1') {
-        return;
-    }
-
-    foreach (xtechs_hardcoded_page_slugs() as $slug) {
-        $page = get_page_by_path($slug, OBJECT, 'page');
-        if ($page instanceof WP_Post) {
-            xtechs_sync_one_hardcoded_page_for_yoast($page);
-        }
-    }
-
-    update_option('xtechs_yoast_sync_bootstrap_done', '1', false);
-}
-add_action('admin_init', 'xtechs_sync_all_hardcoded_pages_for_yoast_bootstrap', 20);
+add_action('admin_enqueue_scripts', 'xtechs_enqueue_yoast_hardcoded_pages_analysis_script', 30);
+add_action('enqueue_block_editor_assets', 'xtechs_enqueue_yoast_hardcoded_pages_analysis_script', 30);
 
 /**
  * Serve project robots.txt content from theme asset file at /robots.txt.
