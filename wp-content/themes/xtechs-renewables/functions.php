@@ -1997,6 +1997,66 @@ function xtechs_seed_yoast_defaults_for_amber_page(): void {
 add_action('admin_init', 'xtechs_seed_yoast_defaults_for_amber_page', 40);
 
 /**
+ * Seed baseline Yoast keyphrase/title/description for all pages when empty,
+ * then trigger a lightweight save so list-table scores are indexed.
+ */
+function xtechs_seed_yoast_defaults_for_all_pages_once(): void {
+    if (!is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (get_option('xtechs_yoast_all_pages_seeded') === '1') {
+        return;
+    }
+
+    $pages = get_posts([
+        'post_type' => 'page',
+        'post_status' => 'publish',
+        'numberposts' => -1,
+    ]);
+
+    foreach ($pages as $page) {
+        if (!$page instanceof WP_Post) {
+            continue;
+        }
+
+        $title = trim((string) get_the_title($page));
+        if ($title === '') {
+            continue;
+        }
+
+        $focus = (string) get_post_meta($page->ID, '_yoast_wpseo_focuskw', true);
+        $seo_title = (string) get_post_meta($page->ID, '_yoast_wpseo_title', true);
+        $meta_desc = (string) get_post_meta($page->ID, '_yoast_wpseo_metadesc', true);
+
+        $changed = false;
+        if (trim($focus) === '') {
+            update_post_meta($page->ID, '_yoast_wpseo_focuskw', $title);
+            $changed = true;
+        }
+        if (trim($seo_title) === '') {
+            update_post_meta($page->ID, '_yoast_wpseo_title', $title . ' | xTechs Renewables');
+            $changed = true;
+        }
+        if (trim($meta_desc) === '') {
+            $desc = 'Learn about ' . $title . ' from xTechs Renewables in Victoria. Contact our team for tailored solar, battery and electrical solutions.';
+            update_post_meta($page->ID, '_yoast_wpseo_metadesc', $desc);
+            $changed = true;
+        }
+
+        if ($changed) {
+            // Trigger normal save/indexation path without altering visible content.
+            wp_update_post([
+                'ID' => $page->ID,
+                'post_content' => (string) $page->post_content,
+            ]);
+        }
+    }
+
+    update_option('xtechs_yoast_all_pages_seeded', '1', false);
+}
+add_action('admin_init', 'xtechs_seed_yoast_defaults_for_all_pages_once', 45);
+
+/**
  * Serve project robots.txt content from theme asset file at /robots.txt.
  */
 add_filter('robots_txt', function (string $output, bool $public): string {
