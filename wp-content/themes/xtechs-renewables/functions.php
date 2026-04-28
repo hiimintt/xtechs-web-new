@@ -2004,7 +2004,7 @@ function xtechs_seed_yoast_defaults_for_all_pages_once(): void {
     if (!is_admin() || wp_doing_ajax()) {
         return;
     }
-    if (get_option('xtechs_yoast_all_pages_seeded') === '1') {
+    if (get_option('xtechs_yoast_all_pages_seeded_v2') === '1') {
         return;
     }
 
@@ -2043,6 +2043,19 @@ function xtechs_seed_yoast_defaults_for_all_pages_once(): void {
             $changed = true;
         }
 
+        // For hardcoded template pages, ensure Yoast list/indexables has analyzable content.
+        if (xtechs_is_hardcoded_page_slug((string) $page->post_name) && trim((string) $page->post_content) === '') {
+            $seed = '<h1>' . esc_html($title) . '</h1>'
+                . '<p>' . esc_html($title) . ' by xTechs Renewables delivers practical guidance, service information, and clear next steps for customers across Victoria.</p>'
+                . '<h2>Why this page matters</h2>'
+                . '<p>We cover benefits, eligibility, solution options, and support details so readers can make informed decisions quickly. Contact our team for tailored recommendations and accurate quoting.</p>';
+            wp_update_post([
+                'ID' => $page->ID,
+                'post_content' => $seed,
+            ]);
+            $changed = false; // already updated above
+        }
+
         if ($changed) {
             // Trigger normal save/indexation path without altering visible content.
             wp_update_post([
@@ -2052,7 +2065,7 @@ function xtechs_seed_yoast_defaults_for_all_pages_once(): void {
         }
     }
 
-    update_option('xtechs_yoast_all_pages_seeded', '1', false);
+    update_option('xtechs_yoast_all_pages_seeded_v2', '1', false);
 }
 add_action('admin_init', 'xtechs_seed_yoast_defaults_for_all_pages_once', 45);
 
