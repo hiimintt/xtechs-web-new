@@ -43,6 +43,11 @@
   `;
   document.body.appendChild(shell);
 
+  const fallbackFab = document.getElementById("xt-chatbot-fallback-fab");
+  if (fallbackFab) {
+    fallbackFab.setAttribute("hidden", "");
+  }
+
   const fab = shell.querySelector(".xt-chatbot-fab");
   const win = shell.querySelector(".xt-chatbot-window");
   const closeBtn = shell.querySelector("[data-chatbot-close]");
