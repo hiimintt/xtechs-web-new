@@ -1701,3 +1701,152 @@ add_action('template_redirect', function (): void {
 
     wp_send_json(['success' => true, 'remoteSynced' => true], 200);
 });
+
+/**
+ * Slugs backed by hardcoded page templates (page-*.php) in this theme.
+ *
+ * @return list<string>
+ */
+function xtechs_hardcoded_page_slugs(): array {
+    static $slugs = null;
+    if (is_array($slugs)) {
+        return $slugs;
+    }
+
+    $slugs = [];
+    $files = glob(get_template_directory() . '/page-*.php');
+    if (!is_array($files)) {
+        return $slugs;
+    }
+
+    foreach ($files as $file) {
+        $base = basename($file);
+        if (!preg_match('/^page-(.+)\.php$/', $base, $m)) {
+            continue;
+        }
+        $slug = sanitize_title((string) $m[1]);
+        if ($slug !== '') {
+            $slugs[] = $slug;
+        }
+    }
+
+    $slugs = array_values(array_unique($slugs));
+    sort($slugs);
+
+    return $slugs;
+}
+
+function xtechs_is_hardcoded_page_slug(string $slug): bool {
+    return in_array($slug, xtechs_hardcoded_page_slugs(), true);
+}
+
+/**
+ * Pull rendered frontend HTML for a page and extract main content for Yoast analysis.
+ */
+function xtechs_rendered_page_markup_for_yoast(WP_Post $page): string {
+    $url = get_permalink($page);
+    if (!is_string($url) || $url === '') {
+        return '';
+    }
+
+    $res = wp_remote_get($url, [
+        'timeout' => 8,
+        'redirection' => 3,
+        'headers' => [
+            'User-Agent' => 'xTechs-Yoast-Sync/1.0',
+        ],
+    ]);
+    if (is_wp_error($res)) {
+        return '';
+    }
+
+    $html = (string) wp_remote_retrieve_body($res);
+    if ($html === '') {
+        return '';
+    }
+
+    if (preg_match('/<main\b[^>]*>(.*?)<\/main>/is', $html, $m)) {
+        $html = (string) $m[1];
+    }
+
+    $html = (string) preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $html);
+    $html = (string) preg_replace('/<style\b[^>]*>.*?<\/style>/is', '', $html);
+    $html = (string) preg_replace('/<noscript\b[^>]*>.*?<\/noscript>/is', '', $html);
+    $html = trim((string) wp_kses_post($html));
+
+    return $html;
+}
+
+function xtechs_sync_one_hardcoded_page_for_yoast(WP_Post $page): void {
+    if ($page->post_type !== 'page' || !xtechs_is_hardcoded_page_slug((string) $page->post_name)) {
+        return;
+    }
+
+    $markup = xtechs_rendered_page_markup_for_yoast($page);
+    if ($markup === '') {
+        return;
+    }
+
+    $hash = md5($markup);
+    $saved_hash = (string) get_post_meta($page->ID, '_xtechs_yoast_sync_hash', true);
+    if ($saved_hash === $hash && trim((string) $page->post_content) !== '') {
+        return;
+    }
+
+    remove_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20);
+    wp_update_post([
+        'ID' => $page->ID,
+        'post_content' => $markup,
+    ]);
+    add_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20, 3);
+
+    update_post_meta($page->ID, '_xtechs_yoast_sync_hash', $hash);
+}
+
+function xtechs_sync_hardcoded_page_for_yoast_on_save(int $post_id, WP_Post $post, bool $update): void {
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+    if ($post->post_type !== 'page' || !xtechs_is_hardcoded_page_slug((string) $post->post_name)) {
+        return;
+    }
+    xtechs_sync_one_hardcoded_page_for_yoast($post);
+}
+add_action('save_post_page', 'xtechs_sync_hardcoded_page_for_yoast_on_save', 20, 3);
+
+/**
+ * One-time bootstrap sync for all hardcoded pages (so Yoast can analyze without editor edits).
+ */
+function xtechs_sync_all_hardcoded_pages_for_yoast_bootstrap(): void {
+    if (!is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (get_option('xtechs_yoast_sync_bootstrap_done') === '1') {
+        return;
+    }
+
+    foreach (xtechs_hardcoded_page_slugs() as $slug) {
+        $page = get_page_by_path($slug, OBJECT, 'page');
+        if ($page instanceof WP_Post) {
+            xtechs_sync_one_hardcoded_page_for_yoast($page);
+        }
+    }
+
+    update_option('xtechs_yoast_sync_bootstrap_done', '1', false);
+}
+add_action('admin_init', 'xtechs_sync_all_hardcoded_pages_for_yoast_bootstrap', 20);
+
+/**
+ * Serve project robots.txt content from theme asset file at /robots.txt.
+ */
+add_filter('robots_txt', function (string $output, bool $public): string {
+    $path = get_template_directory() . '/assets/media/robots.txt';
+    if (!file_exists($path) || !is_readable($path)) {
+        return $output;
+    }
+
+    $content = (string) file_get_contents($path);
+    $content = trim(str_replace("\r\n", "\n", $content));
+
+    return $content !== '' ? $content . "\n" : $output;
+}, 20, 2);

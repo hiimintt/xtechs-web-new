@@ -505,6 +505,35 @@ function xtechs_seo_schema_website(array $urls): array {
 }
 
 /**
+ * Generic WebPage node for the current request (adds per-page context to the graph).
+ *
+ * @return array<string, mixed>
+ */
+function xtechs_seo_schema_webpage(array $urls): array {
+    $url = is_singular() ? get_permalink() : home_url(add_query_arg([], $GLOBALS['wp']->request ?? ''));
+    $title = is_singular() ? wp_strip_all_tags(get_the_title()) : get_bloginfo('name');
+    $desc = xtechs_seo_meta_description() ?: xtechs_seo_default_description();
+
+    $node = [
+        '@type' => is_front_page() ? 'CollectionPage' : 'WebPage',
+        '@id' => trailingslashit((string) $url) . '#webpage',
+        'url' => (string) $url,
+        'name' => (string) $title,
+        'description' => (string) $desc,
+        'isPartOf' => ['@id' => $urls['base'] . '/#website'],
+        'about' => ['@id' => $urls['base'] . '/#organization'],
+        'inLanguage' => 'en-AU',
+    ];
+
+    if (is_singular()) {
+        $node['datePublished'] = get_the_date('c');
+        $node['dateModified'] = get_the_modified_date('c');
+    }
+
+    return $node;
+}
+
+/**
  * Explicit Service nodes (task list: Service schema in addition to catalog).
  *
  * @return list<array<string, mixed>>
@@ -619,6 +648,7 @@ function xtechs_seo_main_schema_graph(): array {
         xtechs_seo_schema_organization($urls),
         xtechs_seo_schema_local_business($urls),
         xtechs_seo_schema_website($urls),
+        xtechs_seo_schema_webpage($urls),
     ];
     foreach (xtechs_seo_schema_service_nodes($urls) as $svc) {
         $graph[] = $svc;
