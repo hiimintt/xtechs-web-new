@@ -244,12 +244,9 @@ $blogs = [];
                         </article>
                     <?php endforeach; ?>
                 <?php else : ?>
-                    <article class="xt-xc-video-card">
-                        <div class="xt-xc-video-body">
-                            <h3>Blogs</h3>
-                            <p>Coming soon</p>
-                        </div>
-                    </article>
+                    <div style="grid-column:1 / -1; text-align:center; padding:2rem 0; font-weight:700; color:#475569;">
+                        Coming soon
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
