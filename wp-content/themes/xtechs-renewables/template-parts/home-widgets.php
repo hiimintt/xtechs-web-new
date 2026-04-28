@@ -34,6 +34,12 @@ $reviews = xtechs_home_static_reviews();
                     </span>
                     <span class="xt-badge-zone"><?php esc_html_e('STC Zone', 'xtechs-renewables'); ?>: <strong id="xt-calc-zone-label">4</strong></span>
                 </div>
+                <div class="xt-calc-zone-row is-hidden" id="xt-calc-distributor-row">
+                    <span class="xt-calc-zone-check" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18"/><path d="M5 14h14"/><path d="M8 18h8"/><path d="M7 6h10"/></svg>
+                    </span>
+                    <span class="xt-badge-zone xt-badge-distributor"><?php esc_html_e('Energy Distributor', 'xtechs-renewables'); ?>: <strong id="xt-calc-distributor-label">-</strong></span>
+                </div>
                 <p class="xt-calc-postcode-err is-hidden" id="xt-calc-postcode-err" role="alert">
                     <span class="xt-calc-postcode-err-ico" aria-hidden="true">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>

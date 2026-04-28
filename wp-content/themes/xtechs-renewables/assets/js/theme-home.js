@@ -129,6 +129,8 @@
     var svDiscountEl = document.getElementById('xt-calc-proposal-sv-discount');
     var pvTooltipBodyEl = document.getElementById('xt-calc-pv-tooltip-body');
     var zoneRowEl = document.getElementById('xt-calc-zone-row');
+    var distributorRowEl = document.getElementById('xt-calc-distributor-row');
+    var distributorLabelEl = document.getElementById('xt-calc-distributor-label');
     var postcodeErrEl = document.getElementById('xt-calc-postcode-err');
     var panelsMiniEl = document.getElementById('xt-calc-panels-mini');
 
@@ -163,7 +165,6 @@
     var zoneFromPostcode = function (postcode) {
       var p = parseInt(postcode || '', 10);
       if (isNaN(p)) return 0;
-      if (p === 3000) return 0;
       if (p >= 800 && p <= 999) return 1;
       if (p >= 200 && p <= 299) return 3;
       if (p >= 3000 && p <= 3999) return 4;
@@ -177,6 +178,19 @@
 
     var zoneFactorByZone = { 1: 1.622, 2: 1.536, 3: 1.382, 4: 1.185 };
 
+    var distributorFromPostcode = function (postcode) {
+      var p = parseInt(postcode || '', 10);
+      if (isNaN(p) || p < 3000 || p > 3999) return '';
+
+      if ((p >= 3000 && p <= 3010) || (p >= 3121 && p <= 3122)) return 'CitiPower';
+      if ((p >= 3011 && p <= 3039) || (p >= 3208 && p <= 3334) || (p >= 3350 && p <= 3579)) return 'Powercor';
+      if ((p >= 3040 && p <= 3068) || (p >= 3070 && p <= 3099)) return 'Jemena';
+      if ((p >= 3140 && p <= 3199) || (p >= 3800 && p <= 3999)) return 'United Energy';
+      if ((p >= 3100 && p <= 3139) || (p >= 3340 && p <= 3499) || (p >= 3580 && p <= 3799)) return 'AusNet';
+
+      return 'Check your bill (varies by suburb)';
+    };
+
     var runCalc = function () {
       var systemKw = clamp(parseFloat(systemInput && systemInput.value ? systemInput.value : '0') || 0, 0, 30);
       var includeBattery = !!(includeBatteryInput && includeBatteryInput.checked);
@@ -185,6 +199,7 @@
       var postcode = postcodeInput && postcodeInput.value ? postcodeInput.value.replace(/\D/g, '').slice(0, 4) : '';
       var zone = zoneFromPostcode(postcode);
       var zoneFactor = zoneFactorByZone[zone] || 0;
+      var distributorName = distributorFromPostcode(postcode);
       var postNum = parseInt(postcode || '', 10);
       var isValidVic = postcode.length === 4 && !isNaN(postNum) && postNum >= 3000 && postNum <= 3999 && zone > 0;
       var deemingYears = 6;
@@ -209,15 +224,19 @@
       if (batteryLabelEl) batteryLabelEl.textContent = Math.round(batteryKwh) + ' kWh';
       paintRangeFill(systemInput);
       if (zoneLabelEl) zoneLabelEl.textContent = isValidVic ? String(zone) : '-';
+      if (distributorLabelEl) distributorLabelEl.textContent = (isValidVic && distributorName) ? distributorName : '-';
       if (zoneRowEl && postcodeErrEl) {
         if (postcode.length < 4) {
           zoneRowEl.classList.add('is-hidden');
+          if (distributorRowEl) distributorRowEl.classList.add('is-hidden');
           postcodeErrEl.classList.add('is-hidden');
         } else if (isValidVic) {
           zoneRowEl.classList.remove('is-hidden');
+          if (distributorRowEl) distributorRowEl.classList.remove('is-hidden');
           postcodeErrEl.classList.add('is-hidden');
         } else {
           zoneRowEl.classList.add('is-hidden');
+          if (distributorRowEl) distributorRowEl.classList.add('is-hidden');
           postcodeErrEl.classList.remove('is-hidden');
         }
       }

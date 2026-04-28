@@ -133,6 +133,12 @@
   border: 1px solid #bbf7d0;
 }
 
+.xt-badge-distributor {
+  background: #dbeafe;
+  color: #1e3a8a;
+  border: 1px solid #bfdbfe;
+}
+
 .xt-calc-postcode-err {
   display: flex;
   align-items: center;
