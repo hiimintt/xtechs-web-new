@@ -91,26 +91,7 @@ $faq = [
     ['q' => 'What makes X-Vrything different?', 'a' => 'It combines powerful automation with an intuitive interface focused on real operational workflows.'],
 ];
 
-$blogs = [
-    [
-        'title' => 'How to Choose the Right Solar System Size',
-        'excerpt' => 'A practical guide to sizing based on your roof, daytime usage, and future plans like EV charging or battery storage.',
-        'category' => 'Guides',
-        'url' => home_url('/blog/solar-system-size-guide'),
-    ],
-    [
-        'title' => 'Battery Rebates in Victoria: What Homeowners Should Know',
-        'excerpt' => 'Understand eligibility, common misconceptions, and how timing can impact your final upfront cost.',
-        'category' => 'Rebates',
-        'url' => home_url('/blog/victoria-battery-rebate-explained'),
-    ],
-    [
-        'title' => 'Solar + EV Charger: Smart Setup for Lower Bills',
-        'excerpt' => 'See how pairing rooftop solar with scheduled EV charging can improve self-consumption and reduce grid reliance.',
-        'category' => 'Case Study',
-        'url' => home_url('/blog/solar-ev-charger-smart-setup'),
-    ],
-];
+$blogs = [];
 ?>
 
 <section class="xt-xc-hero">
@@ -251,16 +232,25 @@ $blogs = [
 
         <div class="xt-xc-tab-panel" data-tab-panel="blogs">
             <div class="xt-xc-video-grid">
-                <?php foreach ($blogs as $blog) : ?>
+                <?php if ($blogs !== []) : ?>
+                    <?php foreach ($blogs as $blog) : ?>
+                        <article class="xt-xc-video-card">
+                            <div class="xt-xc-video-body">
+                                <span class="xt-xc-badge"><?php echo esc_html($blog['category']); ?></span>
+                                <h3><?php echo esc_html($blog['title']); ?></h3>
+                                <p><?php echo esc_html($blog['excerpt']); ?></p>
+                                <a class="xt-btn xt-btn-outline" href="<?php echo esc_url($blog['url']); ?>">Read article</a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                <?php else : ?>
                     <article class="xt-xc-video-card">
                         <div class="xt-xc-video-body">
-                            <span class="xt-xc-badge"><?php echo esc_html($blog['category']); ?></span>
-                            <h3><?php echo esc_html($blog['title']); ?></h3>
-                            <p><?php echo esc_html($blog['excerpt']); ?></p>
-                            <a class="xt-btn xt-btn-outline" href="<?php echo esc_url($blog['url']); ?>">Read article</a>
+                            <h3>Blogs</h3>
+                            <p>Coming soon</p>
                         </div>
                     </article>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
