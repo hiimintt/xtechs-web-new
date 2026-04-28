@@ -48,6 +48,29 @@ if (!defined('XTECHS_GOOGLE_BUSINESS_PROFILE_URL')) {
 }
 
 /**
+ * Google Search “Reviews” pane URL for xTechs (Business Profile reviews). Override in wp-config if needed.
+ */
+if (!defined('XTECHS_GOOGLE_REVIEWS_URL')) {
+    define(
+        'XTECHS_GOOGLE_REVIEWS_URL',
+        'https://www.google.com/search?q=xtechs+renewables&oq=&gs_lcrp=EgZjaHJvbWUqBggBEEUYOzIGCAAQRRg5MgYIARBFGDsyBggCECMYJzIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQg1MjAwajBqN6gCALACAA&sourceid=chrome&ie=UTF-8#lrd=0x6ad66db36c6b8917:0x81ad2dc996edb760,1,,,,'
+    );
+}
+
+/**
+ * Public URL for “Read more on Google Reviews” (home carousel + links).
+ */
+function xtechs_google_reviews_url(): string {
+    $url = defined('XTECHS_GOOGLE_REVIEWS_URL') ? (string) XTECHS_GOOGLE_REVIEWS_URL : '';
+    $url = trim($url);
+    if ($url !== '') {
+        return esc_url_raw($url);
+    }
+
+    return esc_url_raw(xtechs_seo_google_business_profile_url());
+}
+
+/**
  * Maps / Google Business Profile URL for footer + NAP (falls back to a Maps search for NAP consistency).
  */
 function xtechs_seo_google_business_profile_url(): string {

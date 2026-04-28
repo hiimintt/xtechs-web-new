@@ -36,17 +36,6 @@ $chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_direc
                 <p><?php esc_html_e('ACN: 673 983 572', 'xtechs-renewables'); ?></p>
                 <p><?php esc_html_e('REC: 36065', 'xtechs-renewables'); ?></p>
             </div>
-            <?php if (defined('XTECHS_ORG_STREET') && function_exists('xtechs_seo_google_business_profile_url')) : ?>
-                <address class="xt-footer-nap">
-                    <span class="xt-footer-nap-name"><?php echo esc_html((string) XTECHS_ORG_LEGAL_NAME); ?></span>
-                    <span class="xt-footer-nap-line"><?php echo esc_html((string) XTECHS_ORG_STREET); ?>, <?php echo esc_html((string) XTECHS_ORG_LOCALITY); ?> <?php echo esc_html((string) XTECHS_ORG_REGION); ?> <?php echo esc_html((string) XTECHS_ORG_POSTAL); ?></span>
-                    <span class="xt-footer-nap-line">
-                        <a href="tel:1300983247"><?php esc_html_e('1300 983 247', 'xtechs-renewables'); ?></a>
-                        <span class="xt-footer-nap-sep" aria-hidden="true"> · </span>
-                        <a href="<?php echo esc_url(xtechs_seo_google_business_profile_url()); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Maps / reviews', 'xtechs-renewables'); ?></a>
-                    </span>
-                </address>
-            <?php endif; ?>
         </div>
 
         <div class="xt-footer-columns-wrap">
@@ -111,7 +100,6 @@ $chatbot_script_url = add_query_arg('v', $chatbot_script_ver, get_template_direc
                         <span class="xt-footer-contact-icon" aria-hidden="true"><?php echo xtechs_icon_phone(); ?></span>
                         <a href="tel:1300983247">1300 983 247</a>
                     </p>
-                    <p><?php esc_html_e('2 Corporate Ave, Rowville VIC 3178', 'xtechs-renewables'); ?></p>
                 </div>
                 <div class="xt-footer-card-actions">
                     <a class="xt-btn xt-btn-primary xt-btn-block" href="<?php echo esc_url(home_url('/contact')); ?>"><?php esc_html_e('Contact Us', 'xtechs-renewables'); ?></a>

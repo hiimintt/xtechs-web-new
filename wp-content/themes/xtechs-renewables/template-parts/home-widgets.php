@@ -240,7 +240,7 @@ $reviews = xtechs_home_static_reviews();
         <div class="xt-reviews-links">
             <p class="xt-reviews-links-lead"><?php esc_html_e('Read more reviews on', 'xtechs-renewables'); ?></p>
             <div class="xt-reviews-links-row">
-                <a class="xt-reviews-ext" href="https://www.google.com/search?q=xTechs+Renewables+reviews" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Reviews', 'xtechs-renewables'); ?></a>
+                <a class="xt-reviews-ext" href="<?php echo esc_url(function_exists('xtechs_google_reviews_url') ? xtechs_google_reviews_url() : home_url('/')); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Reviews', 'xtechs-renewables'); ?></a>
                 <a class="xt-reviews-ext" href="https://www.solarquotes.com.au/solar-reviews/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('SolarQuotes Reviews', 'xtechs-renewables'); ?></a>
             </div>
             <p class="xt-reviews-note"><?php esc_html_e('*Reviews shown from Google My Business and SolarQuotes.', 'xtechs-renewables'); ?></p>

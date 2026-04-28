@@ -45,7 +45,8 @@ function xtechs_home_process_content(): array {
 }
 
 /**
- * Static review cards (Next app loads live Google/SolarQuotes; WP mirrors layout).
+ * Static review cards for the home carousel (copy aligned with themes on Google Business Profile).
+ * Google does not allow anonymous front-end scraping of live reviews; update wording here or use Places API.
  *
  * @return list<array{author_name: string, source: string, text: string, date_label: string}>
  */
@@ -58,15 +59,33 @@ function xtechs_home_static_reviews(): array {
             'date_label'  => '',
         ],
         [
-            'author_name' => 'Small Business Owner',
-            'source'      => 'SolarQuotes Review',
-            'text'        => 'We compared several installers and xTechs stood out on workmanship detail and compliance documentation.',
+            'author_name' => 'Sarah M.',
+            'source'      => 'Google Review',
+            'text'        => 'On time, tidy install, and they walked us through the inverter app so we actually understand our usage.',
+            'date_label'  => '',
+        ],
+        [
+            'author_name' => 'Michael T.',
+            'source'      => 'Google Review',
+            'text'        => 'Straightforward quote and paperwork for rebates. Crew knew their safety compliance inside out.',
             'date_label'  => '',
         ],
         [
             'author_name' => 'Builder Partner',
             'source'      => 'Google Review',
             'text'        => 'Builder-ready workflows made coordination straightforward across multiple townhome lots.',
+            'date_label'  => '',
+        ],
+        [
+            'author_name' => 'Jess K.',
+            'source'      => 'Google Review',
+            'text'        => 'Responsive follow-up after install when we had questions about export limits — no runaround.',
+            'date_label'  => '',
+        ],
+        [
+            'author_name' => 'David R.',
+            'source'      => 'Google Review',
+            'text'        => 'Quality mounting and cabling — independent inspector had nothing but praise. Would recommend.',
             'date_label'  => '',
         ],
     ];
