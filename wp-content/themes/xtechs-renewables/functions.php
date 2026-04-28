@@ -1823,6 +1823,39 @@ add_action('admin_enqueue_scripts', 'xtechs_enqueue_yoast_hardcoded_pages_analys
 add_action('enqueue_block_editor_assets', 'xtechs_enqueue_yoast_hardcoded_pages_analysis_script', 30);
 
 /**
+ * Seed Yoast defaults for Amber Electric hardcoded page (only when empty).
+ */
+function xtechs_seed_yoast_defaults_for_amber_page(): void {
+    if (!is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (get_option('xtechs_yoast_amber_defaults_seeded') === '1') {
+        return;
+    }
+
+    $amber = get_page_by_path('amber-electric', OBJECT, 'page');
+    if (!$amber instanceof WP_Post) {
+        return;
+    }
+
+    $defaults = [
+        '_yoast_wpseo_focuskw' => 'Amber Electric',
+        '_yoast_wpseo_title' => 'Amber Electric Partnership | xTechs Renewables',
+        '_yoast_wpseo_metadesc' => 'Amber Electric partnership with xTechs Renewables: premium solar and battery systems with wholesale energy optimization for higher returns.',
+    ];
+
+    foreach ($defaults as $meta_key => $meta_value) {
+        $existing = (string) get_post_meta($amber->ID, $meta_key, true);
+        if (trim($existing) === '') {
+            update_post_meta($amber->ID, $meta_key, $meta_value);
+        }
+    }
+
+    update_option('xtechs_yoast_amber_defaults_seeded', '1', false);
+}
+add_action('admin_init', 'xtechs_seed_yoast_defaults_for_amber_page', 40);
+
+/**
  * Serve project robots.txt content from theme asset file at /robots.txt.
  */
 add_filter('robots_txt', function (string $output, bool $public): string {

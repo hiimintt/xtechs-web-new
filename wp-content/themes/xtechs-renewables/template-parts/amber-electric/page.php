@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 
 $amber_signup = 'https://app.amber.com.au/signup/?couponCode=XTECHSRENEWAB';
 $contact_url = function_exists('xtechs_page_link') ? xtechs_page_link('contact') : home_url('/contact/');
+$brand_logo = get_template_directory_uri() . '/assets/media/xlogo.webp';
 
 $ic_dollar = '<svg class="xt-amber-card-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
 $ic_zap = '<svg class="xt-amber-card-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
@@ -26,6 +27,15 @@ $ic_arrow = '<svg class="xt-icon-inline" width="20" height="20" viewBox="0 0 24 
             <p class="xt-amber-hero-lead">
                 Get premium residential &amp; commercial solar systems from <strong>xTechs</strong> and maximize earnings with <strong>Amber Electric's</strong>
                 wholesale pricing. Perfect for homes and businesses looking to maximize their solar investment.
+            </p>
+            <p class="xt-amber-hero-logo" style="margin:0.75rem 0 0;">
+                <img
+                    src="<?php echo esc_url($brand_logo); ?>"
+                    alt="<?php esc_attr_e('Amber Electric partnership with xTechs Renewables', 'xtechs-renewables'); ?>"
+                    width="180"
+                    height="54"
+                    loading="lazy"
+                />
             </p>
             <div class="xt-amber-hero-btns">
                 <a class="xt-btn xt-btn-lg xt-amber-btn-hero-a" href="<?php echo esc_url($amber_signup); ?>" target="_blank" rel="noopener noreferrer">
