@@ -91,7 +91,16 @@ $faq = [
     ['q' => 'What makes X-Vrything different?', 'a' => 'It combines powerful automation with an intuitive interface focused on real operational workflows.'],
 ];
 
-$blogs = [];
+$blogs = [
+    [
+        'id' => 'updated-blog-1',
+        'title' => 'Solar Battery Rebate Changes Coming May 1, 2026: Simple Explanation',
+        'excerpt' => 'A simple breakdown of what changes for Solar Battery Rebates starting May 1, 2026.',
+        'category' => 'Release Highlights',
+        'url' => add_query_arg('pagename', 'blog', home_url('/')),
+    ],
+];
+$blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
 ?>
 
 <section class="xt-xc-hero">
@@ -234,12 +243,19 @@ $blogs = [];
             <div class="xt-xc-video-grid">
                 <?php if ($blogs !== []) : ?>
                     <?php foreach ($blogs as $blog) : ?>
+                        <?php
+                        $href = $blog['url'] ?? $blog_base_url;
+                        // Optional query var so page-blog.php can decide which blog to render.
+                        if ((!isset($blog['url']) || $blog['url'] === '') && isset($blog['id']) && is_string($blog['id']) && trim($blog['id']) !== '') {
+                            $href = add_query_arg('blog', rawurlencode($blog['id']), $blog_base_url);
+                        }
+                        ?>
                         <article class="xt-xc-video-card">
                             <div class="xt-xc-video-body">
                                 <span class="xt-xc-badge"><?php echo esc_html($blog['category']); ?></span>
                                 <h3><?php echo esc_html($blog['title']); ?></h3>
                                 <p><?php echo esc_html($blog['excerpt']); ?></p>
-                                <a class="xt-btn xt-btn-outline" href="<?php echo esc_url($blog['url']); ?>">Read article</a>
+                                <a class="xt-btn xt-btn-outline" href="<?php echo esc_url((string) $href); ?>">View Blog</a>
                             </div>
                         </article>
                     <?php endforeach; ?>
