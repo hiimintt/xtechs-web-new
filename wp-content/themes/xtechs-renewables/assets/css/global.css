@@ -2929,6 +2929,25 @@ a {
   background: color-mix(in srgb, var(--brand-primary) 55%, #fff);
 }
 
+/* iOS/mobile text rendering guard for Process section */
+@media (max-width: 767px) {
+  .xt-pvclone-process .xt-pvclone-h2,
+  .xt-pvclone-process .xt-pvclone-muted,
+  .xt-pvclone-process .xt-pvclone-process-card-title,
+  .xt-pvclone-process .xt-pvclone-step-btn,
+  .xt-pvclone-process .xt-pvclone-process-panel-title,
+  .xt-pvclone-process .xt-pvclone-process-panel-desc,
+  .xt-pvclone-process .xt-pvclone-process-body,
+  .xt-pvclone-process .xt-pvclone-process-body p,
+  .xt-pvclone-process .xt-pvclone-process-phase-label {
+    text-shadow: none;
+    -webkit-text-stroke: 0 transparent;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
 /* ——— FAQ hub ——— */
 .xt-pvclone-faq {
   padding: 2.5rem 0 3rem;
