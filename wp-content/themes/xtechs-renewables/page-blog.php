@@ -844,13 +844,13 @@ get_header();
                         optimize your energy plan, and integrate everything (solar + battery + EV + VPP).
                     </p>
                     <div class="xt-cta-grid">
-                        <a class="xt-btn xt-btn-primary" href="#">Get Your Free Battery + Solar Consultation</a>
-                        <a class="xt-btn xt-btn-outline" href="#">Calculate Your Potential VPP Earnings</a>
-                        <a class="xt-btn xt-btn-outline" href="#">See Our Recent Melbourne Installations</a>
-                        <a class="xt-btn xt-btn-outline" href="#">Chat With Our Energy Experts</a>
+                        <a class="xt-btn xt-btn-primary" href="<?php echo esc_url(home_url('/contact')); ?>">Get Your Free Battery + Solar Consultation</a>
+                        <a class="xt-btn xt-btn-outline" href="https://app.amber.com.au/signup/?couponCode=XTECHSRENEWAB" target="_blank" rel="noopener noreferrer">Calculate Your Potential VPP Earnings</a>
+                        <a class="xt-btn xt-btn-outline" href="https://www.instagram.com/xtechsrenewables" target="_blank" rel="noopener noreferrer">See Our Recent Melbourne Installations</a>
+                        <a class="xt-btn xt-btn-outline" href="#" data-xt-open-chatbot="1">Chat With Our Energy Experts</a>
                     </div>
                     <p style="margin:0.9rem 0 0; color:#475569; font-weight:700;">
-                        Call us: [Your number] &nbsp;|&nbsp; Email: [Your email]
+                        Call us: 1300 983 247 &nbsp;|&nbsp; Email: inquiries@xtechsrenewables.com.au
                     </p>
                     <p style="margin:0.25rem 0 0; color:#64748b;">
                         We serve: Kew, Rowville, Bayswater, Mornington, Bendigo, Geelong + greater Melbourne
@@ -885,6 +885,30 @@ get_header();
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var chatCta = document.querySelector('[data-xt-open-chatbot="1"]');
+    if (!chatCta) {
+        return;
+    }
+
+    chatCta.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        var realFab = document.querySelector('.xt-chatbot-fab');
+        if (realFab && !realFab.hidden) {
+            realFab.click();
+            return;
+        }
+
+        var fallbackFab = document.getElementById('xt-chatbot-fallback-fab');
+        if (fallbackFab) {
+            fallbackFab.click();
+        }
+    });
+});
+</script>
 
 <?php
 get_footer();
