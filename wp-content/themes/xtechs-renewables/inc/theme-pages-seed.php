@@ -42,6 +42,7 @@ function xtechs_maybe_seed_theme_pages(): void
 
     $pages = [
         'about' => 'About',
+        'blog' => 'Blog',
         'contact' => 'Contact',
         'privacy' => 'Privacy Policy',
         'cookies' => 'Cookie Policy',
