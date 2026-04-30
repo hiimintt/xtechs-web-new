@@ -129,6 +129,36 @@ get_header();
                 box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
                 opacity: 0.95;
             }
+            .xt-blog-back-to-top-fab {
+                position: fixed;
+                right: 1.25rem;
+                bottom: 5.25rem;
+                z-index: 100070;
+                width: 3.5rem;
+                height: 3.5rem;
+                border: none;
+                border-radius: 9999px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(145deg, #0f766e, #06303f);
+                color: #ffffff;
+                cursor: pointer;
+                box-shadow: 0 10px 28px rgba(6, 48, 63, 0.32), 0 2px 8px rgba(15, 23, 42, 0.12);
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
+                transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .xt-blog-back-to-top-fab.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+            .xt-blog-back-to-top-fab:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 14px 32px rgba(6, 48, 63, 0.36), 0 4px 10px rgba(15, 23, 42, 0.16);
+            }
             @media (max-width: 720px) {
                 .xt-blog-title-card {
                     border-radius: 16px;
@@ -141,6 +171,12 @@ get_header();
                 }
                 .xt-blog-article { font-size: 1.01rem; }
                 .xt-blog-article .xt-cta-grid { grid-template-columns: 1fr; }
+                .xt-blog-back-to-top-fab {
+                    right: 1rem;
+                    bottom: 4.5rem;
+                    width: 3.15rem;
+                    height: 3.15rem;
+                }
             }
         </style>
 
@@ -886,6 +922,10 @@ get_header();
     </div>
 </section>
 
+<button type="button" class="xt-blog-back-to-top-fab" id="xt-blog-back-to-top" aria-label="Back to top" hidden>
+    <span aria-hidden="true">↑</span>
+</button>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var chatCta = document.querySelector('[data-xt-open-chatbot="1"]');
@@ -907,6 +947,34 @@ document.addEventListener('DOMContentLoaded', function () {
             fallbackFab.click();
         }
     });
+
+    var backToTopFab = document.getElementById('xt-blog-back-to-top');
+    if (!backToTopFab) {
+        return;
+    }
+
+    var revealThreshold = 420;
+
+    var updateBackToTopVisibility = function () {
+        if (window.scrollY > revealThreshold) {
+            backToTopFab.hidden = false;
+            backToTopFab.classList.add('is-visible');
+        } else {
+            backToTopFab.classList.remove('is-visible');
+            window.setTimeout(function () {
+                if (!backToTopFab.classList.contains('is-visible')) {
+                    backToTopFab.hidden = true;
+                }
+            }, 220);
+        }
+    };
+
+    backToTopFab.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    updateBackToTopVisibility();
+    window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
 });
 </script>
 
