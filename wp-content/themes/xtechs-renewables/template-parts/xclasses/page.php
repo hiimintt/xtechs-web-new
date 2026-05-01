@@ -132,6 +132,16 @@ $blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
                 </span>
                 <span>Videos</span>
             </button>
+            <button type="button" class="xt-xc-tab" data-tab-target="blogs">
+                <span class="xt-xc-tab-ic" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 5h16"></path>
+                        <path d="M4 12h16"></path>
+                        <path d="M4 19h10"></path>
+                    </svg>
+                </span>
+                <span>Blogs</span>
+            </button>
             <button type="button" class="xt-xc-tab" data-tab-target="community">
                 <span class="xt-xc-tab-ic" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -143,23 +153,13 @@ $blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
                 </span>
                 <span>Community</span>
             </button>
-            <button type="button" class="xt-xc-tab" data-tab-target="blogs">
-                <span class="xt-xc-tab-ic" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 5h16"></path>
-                        <path d="M4 12h16"></path>
-                        <path d="M4 19h10"></path>
-                    </svg>
-                </span>
-                <span>Blogs</span>
-            </button>
         </div>
 
         <div class="xt-xc-mobile-select-wrap">
             <select class="xt-xc-mobile-select" id="xt-xc-mobile-select" aria-label="X-Classes tab selector">
                 <option value="videos">Videos</option>
-                <option value="community">Community</option>
                 <option value="blogs">Blogs</option>
+                <option value="community">Community</option>
             </select>
         </div>
 
@@ -177,6 +177,34 @@ $blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
                         </div>
                     </article>
                 <?php endforeach; ?>
+            </div>
+        </div>
+
+        <div class="xt-xc-tab-panel" data-tab-panel="blogs">
+            <div class="xt-xc-video-grid">
+                <?php if ($blogs !== []) : ?>
+                    <?php foreach ($blogs as $blog) : ?>
+                        <?php
+                        $href = $blog['url'] ?? $blog_base_url;
+                        // Optional query var so page-blog.php can decide which blog to render.
+                        if ((!isset($blog['url']) || $blog['url'] === '') && isset($blog['id']) && is_string($blog['id']) && trim($blog['id']) !== '') {
+                            $href = add_query_arg('blog', rawurlencode($blog['id']), $blog_base_url);
+                        }
+                        ?>
+                        <article class="xt-xc-video-card">
+                            <div class="xt-xc-video-body">
+                                <span class="xt-xc-badge"><?php echo esc_html($blog['category']); ?></span>
+                                <h3><?php echo esc_html($blog['title']); ?></h3>
+                                <p><?php echo esc_html($blog['excerpt']); ?></p>
+                                <a class="xt-btn xt-btn-outline" href="<?php echo esc_url((string) $href); ?>">View Blog</a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div style="grid-column:1 / -1; text-align:center; padding:2rem 0; font-weight:700; color:#475569;">
+                        Coming soon
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -221,7 +249,7 @@ $blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
                                 $published = $item['published_at'];
                                 if (is_string($published) && $published !== '' && $published[0] === '-') {
                                     $tz = function_exists('wp_timezone') ? wp_timezone() : new DateTimeZone('UTC');
-                                    $published = (new DateTimeImmutable('now', $tz))->modify($published)->format('Y-m-d\TH:i:s');
+                                    $published = (new DateTimeImmutable('now', $tz))->modify($published)->format('Y-m-d\\TH:i:s');
                                 }
                                 $rel = xtechs_xc_format_relative_date($published);
                                 ?>
@@ -236,34 +264,6 @@ $blog_base_url = add_query_arg('pagename', 'blog', home_url('/'));
                         </div>
                     </article>
                 </div>
-            </div>
-        </div>
-
-        <div class="xt-xc-tab-panel" data-tab-panel="blogs">
-            <div class="xt-xc-video-grid">
-                <?php if ($blogs !== []) : ?>
-                    <?php foreach ($blogs as $blog) : ?>
-                        <?php
-                        $href = $blog['url'] ?? $blog_base_url;
-                        // Optional query var so page-blog.php can decide which blog to render.
-                        if ((!isset($blog['url']) || $blog['url'] === '') && isset($blog['id']) && is_string($blog['id']) && trim($blog['id']) !== '') {
-                            $href = add_query_arg('blog', rawurlencode($blog['id']), $blog_base_url);
-                        }
-                        ?>
-                        <article class="xt-xc-video-card">
-                            <div class="xt-xc-video-body">
-                                <span class="xt-xc-badge"><?php echo esc_html($blog['category']); ?></span>
-                                <h3><?php echo esc_html($blog['title']); ?></h3>
-                                <p><?php echo esc_html($blog['excerpt']); ?></p>
-                                <a class="xt-btn xt-btn-outline" href="<?php echo esc_url((string) $href); ?>">View Blog</a>
-                            </div>
-                        </article>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <div style="grid-column:1 / -1; text-align:center; padding:2rem 0; font-weight:700; color:#475569;">
-                        Coming soon
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
